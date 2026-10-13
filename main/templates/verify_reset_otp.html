@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Verify OTP - Handora</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fdf6e9;
+            font-family: Georgia, 'Times New Roman', serif;
+            color: #7B2D26;
+        }
+
+        .reset-container {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .reset-card {
+            width: 430px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 55px 50px;
+            box-sizing: border-box;
+        }
+
+        .reset-card h1 {
+            margin: 0;
+            text-align: center;
+            font-size: 40px;
+            line-height: 1.2;
+            color: #7B2D26;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 18px;
+            line-height: 1.4;
+            margin: 22px 0 40px;
+            color: #8B5A52;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 19px;
+            margin-bottom: 10px;
+            color: #6F2A24;
+        }
+
+        .otp-input {
+            width: 100%;
+            height: 58px;
+            box-sizing: border-box;
+            border: 1px solid #d8b7ad;
+            border-radius: 10px;
+            padding: 0 18px;
+            font-size: 22px;
+            text-align: center;
+            letter-spacing: 8px;
+            outline: none;
+        }
+
+        .otp-input:focus {
+            border-color: #7B2D26;
+        }
+
+        .verify-btn {
+            width: 100%;
+            height: 60px;
+            margin-top: 30px;
+            border: none;
+            border-radius: 10px;
+            background-color: #8B3028;
+            color: #ffffff !important;
+            font-size: 19px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .resend-link {
+            display: block;
+            margin-top: 30px;
+            text-align: center;
+            color: #8B3028;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .back-login {
+            display: block;
+            margin-top: 22px;
+            text-align: center;
+            color: #8B3028;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            padding: 12px;
+            border-radius: 7px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #842029;
+        }
+
+        .success {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+
+        @media (max-width: 500px) {
+
+            .reset-card {
+                width: calc(100% - 30px);
+                padding: 40px 25px;
+            }
+
+            .reset-card h1 {
+                font-size: 34px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="reset-container">
+
+    <div class="reset-card">
+
+        <h1>Verify OTP</h1>
+
+        <p class="subtitle">
+            Enter the OTP sent to your registered email address
+        </p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message
+                    {% if message.tags == 'error' %}
+                        error
+                    {% else %}
+                        success
+                    {% endif %}
+                ">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <label
+                for="otp"
+                class="form-label"
+            >
+                Enter OTP
+            </label>
+
+            <input
+                type="text"
+                id="otp"
+                name="otp"
+                class="otp-input"
+                maxlength="6"
+                minlength="6"
+                pattern="[0-9]{6}"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                placeholder="000000"
+                required
+            >
+
+            <button
+                type="submit"
+                class="verify-btn"
+            >
+                Verify OTP
+            </button>
+
+        </form>
+
+        <a
+            href="{% url 'resend_reset_otp' %}"
+            class="resend-link"
+        >
+            Resend OTP
+        </a>
+
+        <a
+            href="{% url 'password_reset' %}"
+            class="back-login"
+        >
+            Back to Forgot Password
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

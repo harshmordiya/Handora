@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Terms & Conditions - handora{% endblock %}
+
+{% block content %}
+<section class="page-section">
+    <h1>Terms &amp; Conditions</h1>
+
+    <p>These Terms &amp; Conditions ("Terms") govern your access to and use of the Handora website, mobile application, and services. By accessing or using our website, placing an order, or creating an account, you agree to be bound by these Terms. Please read them carefully before proceeding.</p>
+
+    <h2 class="info-subtitle">Website Usage</h2>
+    <p>You may browse our website for informational purposes. You agree not to misuse the site, attempt unauthorized access, or engage in any activity that could disrupt our services. All content, images, and trademarks displayed on Handora are the property of Handora or its licensors.</p>
+
+    <h2 class="info-subtitle">User Accounts</h2>
+    <p>To place orders, you may create an account using your email, phone, and a secure password. You are responsible for maintaining the confidentiality of your account credentials and for all activities under your account. Notify us immediately of any unauthorized use.</p>
+
+    <h2 class="info-subtitle">Product Information</h2>
+    <p>We strive for accuracy in product descriptions, images, and pricing. However, errors may occur. If we discover a pricing or description error, we may cancel your order and notify you. Product images are for illustrative purposes and may slightly differ from the actual product due to screen settings.</p>
+
+    <h2 class="info-subtitle">Pricing</h2>
+    <p>All prices listed on Handora are in Indian Rupees (INR) and include applicable taxes unless otherwise stated. Prices are subject to change without notice. Any price changes will not affect orders that have already been confirmed and paid for.</p>
+
+    <h2 class="info-subtitle">Orders</h2>
+    <p>You can place orders by selecting products and proceeding through checkout. We reserve the right to refuse or cancel any order at our sole discretion, including but not limited to orders that appear to be fraudulent or contain errors in product or pricing information.</p>
+
+    <h2 class="info-subtitle">Payments</h2>
+    <p>We accept UPI, Credit/Debit cards, Net Banking, and Cash on Delivery. All online payments are processed securely through our trusted payment gateway partners. By providing payment information, you authorize us to charge the specified amount plus any applicable fees.</p>
+
+    <h2 class="info-subtitle">Shipping</h2>
+    <p>We ship to addresses across India and select international destinations. Shipping times are estimates only and are not guaranteed. Risk of loss or damage transfers to you upon delivery. See our <a href="{% url 'shipping' %}">Shipping Info</a> page for full details.</p>
+
+    <h2 class="info-subtitle">Limitation of Liability</h2>
+    <p>To the fullest extent permitted by law, Handora shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of our website or products. Our total liability shall not exceed the amount paid by you for the product(s) in question.</p>
+
+    <h2 class="info-subtitle">Contact Information</h2>
+    <p>For questions regarding these Terms, please contact us at use our <a href="{% url 'contact' %}">Contact Us</a> form. We will respond within 48 business hours.</p>
+</section>
+{% endblock %}

@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us - handora{% endblock %}
+
+{% block content %}
+
+<style>
+    /* ================================
+       CONTACT PAGE BACK BUTTON
+       ================================ */
+
+    .contact-back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        margin-bottom: 20px;
+        padding: 9px 18px;
+
+        border: 1px solid #8B3028;
+        border-radius: 6px;
+
+        background: #ffffff;
+        color: #8B3028;
+
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 600;
+
+        transition: all 0.2s ease;
+    }
+
+    .contact-back-btn:hover {
+        background: #8B3028;
+        color: #ffffff;
+    }
+
+    .contact-back-btn span {
+        font-size: 18px;
+        line-height: 1;
+    }
+</style>
+
+
+<section class="page-section">
+
+    <!-- BACK BUTTON -->
+    <a
+        href="javascript:history.back()"
+        class="contact-back-btn"
+    >
+        <span>←</span>
+        Back
+    </a>
+
+
+    <h1>Contact Us</h1>
+
+    <p>
+        We would love to hear from you! Whether you have a question about
+        our products, need help with an order, or want to collaborate,
+        feel free to reach out.
+    </p>
+
+
+    <div class="contact-layout">
+
+        <!-- ================================
+             CONTACT INFORMATION
+             ================================ -->
+
+        <div class="contact-info-card">
+
+            <h3>Reach Us At</h3>
+
+
+            <div class="contact-info-item">
+
+                <span class="contact-icon">📧</span>
+
+                <div>
+                    <strong>Email</strong>
+
+                    <a href="mailto:Harshmordiya@desihands.com">
+                        Harshmordiya@desihands.com
+                    </a>
+                </div>
+
+            </div>
+
+
+            <div class="contact-info-item">
+
+                <span class="contact-icon">📞</span>
+
+                <div>
+                    <strong>Phone</strong>
+
+                    <a href="tel:+919876543210">
+                        +91 98765 43210
+                    </a>
+                </div>
+
+            </div>
+
+
+            <div class="contact-info-item">
+
+                <span class="contact-icon">📍</span>
+
+                <div>
+                    <strong>Address</strong>
+
+                    <p>
+                        vaishnodevi circle ahmedabad, India
+                    </p>
+                </div>
+
+            </div>
+
+
+            <p
+                style="
+                    margin-top:1rem;
+                    font-size:0.9rem;
+                    color:#777;
+                "
+            >
+                Our team typically responds within 24 hours.
+                Thank you for supporting handmade!
+            </p>
+
+        </div>
+
+
+        <!-- ================================
+             CONTACT FORM
+             ================================ -->
+
+        <div class="contact-form-card">
+
+            <h3>Send us a Message</h3>
+
+
+            <form
+                method="post"
+                class="contact-form"
+            >
+
+                {% csrf_token %}
+
+
+                <div class="form-row">
+
+                    <!-- NAME -->
+                    <div class="form-group">
+
+                        <label for="id_name">
+                            Name *
+                        </label>
+
+                        <input
+                            type="text"
+                            name="name"
+                            id="id_name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+                    <div class="form-group">
+
+                        <label for="id_email">
+                            Email *
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            id="id_email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUBJECT -->
+                <div class="form-group">
+
+                    <label for="id_subject">
+                        Subject
+                    </label>
+
+                    <input
+                        type="text"
+                        name="subject"
+                        id="id_subject"
+                    >
+
+                </div>
+
+
+                <!-- MESSAGE -->
+                <div class="form-group">
+
+                    <label for="id_message">
+                        Message *
+                    </label>
+
+                    <textarea
+                        name="message"
+                        id="id_message"
+                        rows="5"
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <!-- SEND MESSAGE -->
+                <button
+                    type="submit"
+                    class="btn-primary"
+                >
+                    Send Message
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

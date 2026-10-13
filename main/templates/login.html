@@ -1,0 +1,270 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login - handora{% endblock %}
+
+{% block search_bar %}{% endblock %}
+
+{% block header_nav %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-password-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .login-password-wrapper input[type="password"],
+    .login-password-wrapper input[type="text"] {
+        width: 100%;
+        padding-right: 50px;
+        box-sizing: border-box;
+    }
+
+    .login-password-toggle {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #8a6a5a;
+        z-index: 2;
+        user-select: none;
+    }
+
+    .login-password-toggle:hover {
+        color: #7B2D26;
+    }
+
+    .login-password-toggle svg {
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-box">
+
+        <h1 class="auth-title">Sign In</h1>
+
+        <p class="auth-subtitle">
+            Welcome back to handora
+        </p>
+
+        <form method="post" class="auth-form">
+
+            {% csrf_token %}
+
+            <input
+                type="hidden"
+                name="next"
+                value="{{ next }}"
+            >
+
+            <div class="form-group">
+
+                <label for="id_username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    name="username"
+                    id="id_username"
+                    required
+                    autofocus
+                    autocomplete="username"
+                    placeholder="Enter your username"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="id_password">
+                    Password
+                </label>
+
+                <div class="login-password-wrapper">
+
+                    <input
+                        type="password"
+                        name="password"
+                        id="id_password"
+                        required
+                        autocomplete="current-password"
+                        placeholder="Enter your password"
+                    >
+
+                    <span
+                        class="login-password-toggle"
+                        id="loginPasswordToggle"
+                        role="button"
+                        tabindex="0"
+                        aria-label="Show password"
+                    >
+                        <svg
+                            id="loginEyeIcon"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"
+                            />
+
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="3"
+                            />
+                        </svg>
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="auth-btn"
+            >
+                Login
+            </button>
+
+        </form>
+
+
+        <div class="auth-links">
+
+            <p>
+                Don't have an account?
+                <a href="{% url 'register' %}">
+                    Create Account
+                </a>
+            </p>
+
+            <a href="{% url 'password_reset' %}">
+                Forgot your password?
+            </a>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const passwordInput =
+            document.getElementById('id_password');
+
+        const toggleButton =
+            document.getElementById('loginPasswordToggle');
+
+        const eyeIcon =
+            document.getElementById('loginEyeIcon');
+
+
+        function togglePassword() {
+
+            if (passwordInput.type === 'password') {
+
+                passwordInput.type = 'text';
+
+                toggleButton.setAttribute(
+                    'aria-label',
+                    'Hide password'
+                );
+
+                eyeIcon.innerHTML = `
+                    <path
+                        d="M17.94 17.94
+                           A10.94 10.94 0 0 1 12 20
+                           C5 20 1 12 1 12
+                           A18.45 18.45 0 0 1 5.06 6.06"
+                    />
+                    <path
+                        d="M9.9 4.24
+                           A10.94 10.94 0 0 1 12 4
+                           C19 4 23 12 23 12
+                           A18.5 18.5 0 0 1 18.94 17.94"
+                    />
+                    <path
+                        d="M14.12 14.12
+                           A3 3 0 1 1 9.88 9.88"
+                    />
+                    <line
+                        x1="1"
+                        y1="1"
+                        x2="23"
+                        y2="23"
+                    />
+                `;
+
+            } else {
+
+                passwordInput.type = 'password';
+
+                toggleButton.setAttribute(
+                    'aria-label',
+                    'Show password'
+                );
+
+                eyeIcon.innerHTML = `
+                    <path
+                        d="M1 12s4-7 11-7
+                           11 7 11 7-4 7-11 7
+                           -11-7-11-7z"
+                    />
+                    <circle
+                        cx="12"
+                        cy="12"
+                        r="3"
+                    />
+                `;
+            }
+        }
+
+
+        toggleButton.addEventListener(
+            'click',
+            togglePassword
+        );
+
+
+        toggleButton.addEventListener(
+            'keydown',
+            function (event) {
+
+                if (
+                    event.key === 'Enter' ||
+                    event.key === ' '
+                ) {
+
+                    event.preventDefault();
+
+                    togglePassword();
+                }
+            }
+        );
+
+    });
+</script>
+{% endblock %}

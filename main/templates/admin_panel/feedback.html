@@ -1,0 +1,121 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block title %}Handora Admin - Customer Feedback{% endblock %}
+
+{% block extra_head %}
+<style>
+    .handora-feedback-actions {
+        display: flex;
+        gap: 6px;
+    }
+
+    .handora-feedback-delete-btn {
+        padding: 5px 12px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #fff;
+        background: var(--admin-primary);
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    .handora-feedback-delete-btn:hover {
+        background: var(--admin-primary-light);
+    }
+
+    .handora-feedback-reply-btn {
+        padding: 5px 12px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #fff;
+        background: #28a745;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background 0.2s ease;
+    }
+
+    .handora-feedback-reply-btn:hover {
+        background: #218838;
+    }
+</style>
+{% endblock %}
+
+{% block page_title %}Customer Feedback{% endblock %}
+
+{% block content %}
+<div class="handora-content-wrapper">
+    <div class="handora-page-actions">
+        <form method="get" class="handora-search-form-inline">
+            <input type="text" name="search" value="{{ search_query }}" placeholder="Search feedback..." class="handora-form-input handora-form-input-sm">
+            <button type="submit" class="handora-btn handora-btn-sm handora-btn-outline">Search</button>
+            {% if search_query %}
+            <a href="?search=" class="handora-btn handora-btn-sm handora-btn-outline">Clear</a>
+            {% endif %}
+        </form>
+    </div>
+
+    <div class="handora-table-wrapper">
+        <table class="handora-table">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Submitted</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for msg in feedback_messages %}
+                {% with row_num=feedback_messages.start_index|add:forloop.counter|add:"-1" %}
+                <tr class="{% if not msg.is_read %}handora-row-unread{% endif %}">
+                    <td>{{ row_num }}</td>
+                    <td>{{ msg.name }}</td>
+                    <td>{{ msg.email }}</td>
+                    <td>{{ msg.subject|default:"N/A" }}</td>
+                    <td>{{ msg.message|truncatechars:80 }}</td>
+                    <td>{{ msg.submitted_at|date:"M d, Y h:i A" }}</td>
+                    <td class="handora-feedback-actions">
+                        <a href="{% url 'admin_feedback_reply' msg.id %}" class="handora-feedback-reply-btn">Reply</a>
+                        <form method="post" action="{% url 'admin_feedback_delete' msg.id %}" onsubmit="return confirm('Are you sure you want to delete this feedback?');" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="handora-feedback-delete-btn">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endwith %}
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="handora-text-center">No feedback found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if feedback_messages.has_other_pages %}
+    <div class="handora-pagination">
+        {% if feedback_messages.has_previous %}
+        <a href="?page={{ feedback_messages.previous_page_number }}" class="handora-pagination-link">&laquo; Prev</a>
+        {% endif %}
+        {% for page in feedback_messages.paginator.page_range %}
+        {% if feedback_messages.number == page %}
+        <span class="handora-pagination-link active">{{ page }}</span>
+        {% else %}
+        <a href="?page={{ page }}" class="handora-pagination-link">{{ page }}</a>
+        {% endif %}
+        {% endfor %}
+        {% if feedback_messages.has_next %}
+        <a href="?page={{ feedback_messages.next_page_number }}" class="handora-pagination-link">Next &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,540 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block title %}Handora Admin - Category Form{% endblock %}
+
+{% block extra_head %}
+{% if action == 'Edit' %}
+<style>
+:root {
+    --handora-redesign-primary: #8B2F26;
+    --handora-redesign-primary-light: #B8866B;
+    --handora-redesign-card-bg: #FFFFFF;
+    --handora-redesign-bg: #F7F5F2;
+    --handora-redesign-border: #E5E0DA;
+    --handora-redesign-text: #333333;
+    --handora-redesign-text-secondary: #666666;
+}
+
+.handora-redesign-wrapper {
+    padding: 24px;
+}
+
+.handora-redesign-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--handora-redesign-primary);
+    text-decoration: none;
+    margin-bottom: 20px;
+}
+
+.handora-redesign-back-link:hover {
+    text-decoration: underline;
+}
+
+.handora-redesign-card {
+    background: var(--handora-redesign-card-bg);
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--handora-redesign-border);
+    padding: 32px;
+}
+
+.handora-redesign-card .handora-redesign-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--handora-redesign-text);
+    margin-bottom: 24px;
+}
+
+.handora-redesign-form {
+    width: 100%;
+}
+
+.handora-redesign-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+@media (max-width: 768px) {
+    .handora-redesign-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.handora-redesign-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.handora-redesign-field-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.handora-redesign-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--handora-redesign-text);
+    margin-bottom: 6px;
+}
+
+.handora-redesign-label .handora-redesign-required::after {
+    content: " *";
+    color: var(--handora-redesign-primary);
+}
+
+.handora-admin-form-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--handora-redesign-border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--handora-redesign-text);
+    background: var(--handora-redesign-card-bg);
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+}
+
+.handora-admin-form-input:focus {
+    outline: none;
+    border-color: var(--handora-redesign-primary);
+    box-shadow: 0 0 0 3px rgba(139, 47, 38, 0.1);
+}
+
+.handora-admin-form-input::placeholder {
+    color: var(--handora-redesign-text-secondary);
+}
+
+.handora-redesign-textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--handora-redesign-border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--handora-redesign-text);
+    background: var(--handora-redesign-card-bg);
+    font-family: inherit;
+    resize: vertical;
+    min-height: 120px;
+    transition: border-color 0.2s ease;
+}
+
+.handora-redesign-textarea:focus {
+    outline: none;
+    border-color: var(--handora-redesign-primary);
+    box-shadow: 0 0 0 3px rgba(139, 47, 38, 0.1);
+}
+
+.handora-redesign-textarea::placeholder {
+    color: var(--handora-redesign-text-secondary);
+}
+
+.handora-redesign-image-section {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--handora-redesign-border);
+}
+
+.handora-redesign-image-section .handora-redesign-section-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--handora-redesign-text-secondary);
+    margin-bottom: 16px;
+}
+
+.handora-redesign-image-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.handora-redesign-image-preview-col {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.handora-redesign-image-box {
+    width: 140px;
+    height: 140px;
+    border: 1px solid var(--handora-redesign-border);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--handora-redesign-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.handora-redesign-image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.handora-redesign-image-box .handora-redesign-no-image {
+    color: var(--handora-redesign-text-secondary);
+    font-size: 0.85rem;
+}
+
+.handora-redesign-clear-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.handora-redesign-clear-input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.handora-redesign-clear-label {
+    font-size: 0.85rem;
+    color: var(--handora-redesign-text-secondary);
+    cursor: pointer;
+}
+
+.handora-redesign-file-upload {
+    flex: 1;
+    min-width: 300px;
+    height: 140px;
+    box-sizing: border-box;
+    border: 2px dashed var(--handora-redesign-border);
+    border-radius: 10px;
+    padding: 24px;
+    text-align: center;
+    background: #FAFAFA;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.handora-redesign-file-upload:hover {
+    border-color: var(--handora-redesign-primary);
+}
+
+.handora-redesign-file-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto;
+    color: var(--handora-redesign-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.handora-redesign-file-text {
+    font-size: 0.9rem;
+    color: var(--handora-redesign-text-secondary);
+    margin-bottom: 0;
+}
+
+.handora-redesign-file-hint {
+    font-size: 0.8rem;
+    color: var(--handora-redesign-text-secondary);
+    opacity: 0.7;
+}
+
+.handora-redesign-file-input {
+    display: none;
+}
+
+.handora-redesign-file-name {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: var(--handora-redesign-text-secondary);
+}
+
+.handora-redesign-error {
+    color: var(--handora-redesign-primary);
+    font-size: 0.8rem;
+    margin-top: 4px;
+}
+
+.handora-redesign-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--handora-redesign-border);
+}
+
+.handora-redesign-btn {
+    flex: 1;
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.handora-redesign-btn-primary {
+    background: var(--handora-redesign-primary);
+    color: #fff;
+}
+
+.handora-redesign-btn-primary:hover {
+    background: var(--handora-redesign-primary-light);
+}
+
+.handora-redesign-btn-outline {
+    background: transparent;
+    color: var(--handora-redesign-primary);
+    border: 1px solid var(--handora-redesign-primary);
+}
+
+.handora-redesign-btn-outline:hover {
+    background: var(--handora-redesign-primary);
+    color: var(--handora-redesign-card-bg);
+}
+</style>
+{% endif %}
+{% endblock %}
+
+{% block page_title %}{{ action }} Category{% endblock %}
+
+{% block content %}
+{% if action == 'Edit' %}
+
+<div class="handora-redesign-wrapper">
+    <a href="{% url 'admin_categories' %}" class="handora-redesign-back-link">← BACK</a>
+
+    <div class="handora-redesign-card">
+        <h2 class="handora-redesign-title">{{ action }} Category</h2>
+
+        <form method="post" enctype="multipart/form-data" class="handora-redesign-form">
+            {% csrf_token %}
+
+            <div class="handora-redesign-grid">
+
+                <!-- Left Column: Name, Description -->
+                <div class="handora-redesign-col">
+
+                    <div class="handora-redesign-field-group">
+                        <label class="handora-redesign-label handora-redesign-required" for="{{ form.name.id_for_label }}">Name</label>
+                        <input
+                            type="text"
+                            name="{{ form.name.html_name }}"
+                            id="{{ form.name.id_for_label }}"
+                            class="handora-admin-form-input"
+                            value="{{ form.name.value|default_if_none:'' }}"
+                            placeholder="Enter category name"
+                        >
+                        {% if form.name.errors %}
+                        <span class="handora-redesign-error">{{ form.name.errors }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="handora-redesign-field-group">
+                        <label class="handora-redesign-label handora-redesign-required" for="{{ form.description.id_for_label }}">Description</label>
+                        <textarea
+                            name="{{ form.description.html_name }}"
+                            id="{{ form.description.id_for_label }}"
+                            class="handora-redesign-textarea"
+                            placeholder="Enter category description"
+                        >{{ form.description.value|default_if_none:'' }}</textarea>
+                        {% if form.description.errors %}
+                        <span class="handora-redesign-error">{{ form.description.errors }}</span>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <!-- Right Column: Slug -->
+                <div class="handora-redesign-col">
+
+                    <div class="handora-redesign-field-group">
+                        <label class="handora-redesign-label handora-redesign-required" for="{{ form.slug.id_for_label }}">Slug</label>
+                        <input
+                            type="text"
+                            name="{{ form.slug.html_name }}"
+                            id="{{ form.slug.id_for_label }}"
+                            class="handora-admin-form-input"
+                            value="{{ form.slug.value|default_if_none:'' }}"
+                            placeholder="URL-friendly slug"
+                        >
+                        {% if form.slug.errors %}
+                        <span class="handora-redesign-error">{{ form.slug.errors }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div style="flex: 1;"></div>
+
+                </div>
+
+            </div>
+
+            <!-- Image Section -->
+            <div class="handora-redesign-image-section">
+
+                <div class="handora-redesign-section-label">Category Image</div>
+
+                <div class="handora-redesign-image-row">
+
+                    <!-- Image Preview Column -->
+                    <div class="handora-redesign-image-preview-col">
+                        <div class="handora-redesign-image-box" id="handora-category-image-box">
+                            {% if category.image %}
+                            <img src="{{ category.image.url }}" alt="{{ category.name }}" id="handora-category-image">
+                            {% else %}
+                            <span class="handora-redesign-no-image">No image</span>
+                            {% endif %}
+                        </div>
+                        <div class="handora-redesign-clear-wrapper">
+                            <input
+                                type="checkbox"
+                                name="image-clear"
+                                id="id_image_clear"
+                                class="handora-redesign-clear-input"
+                                value="1"
+                            >
+                            <label for="id_image_clear" class="handora-redesign-clear-label">Clear</label>
+                        </div>
+                    </div>
+
+                    <!-- Upload Area -->
+                    <label for="{{ form.image.id_for_label }}" class="handora-redesign-file-upload">
+                        <div class="handora-redesign-file-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="17 1 21 5 17 9"></polyline>
+                                <path d="M9 11l3 3 7-7"></path>
+                            </svg>
+                        </div>
+                        <p class="handora-redesign-file-text">Click to choose a new image</p>
+                        <p class="handora-redesign-file-hint">PNG, JPG or JPEG</p>
+                    </label>
+
+                </div>
+
+                <input type="file" name="{{ form.image.html_name }}" id="{{ form.image.id_for_label }}" class="handora-redesign-file-input" accept="image/*">
+                <div class="handora-redesign-file-name" id="handora-redesign-file-name-category">No file chosen</div>
+
+                {% if form.image.errors %}
+                <span class="handora-redesign-error">{{ form.image.errors }}</span>
+                {% endif %}
+
+            </div>
+
+            <div class="handora-redesign-actions">
+                <button type="submit" class="handora-redesign-btn handora-redesign-btn-primary">Save</button>
+                <a href="{% url 'admin_categories' %}" class="handora-redesign-btn handora-redesign-btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var imageInput = document.getElementById('{{ form.image.id_for_label }}');
+    var imageBox = document.getElementById('handora-category-image-box');
+    var imagePreview = document.getElementById('handora-category-image');
+    var fileNameSpan = document.getElementById('handora-redesign-file-name-category');
+
+    if (imageInput) {
+        imageInput.addEventListener('change', function () {
+            var file = this.files && this.files[0];
+
+            if (fileNameSpan) {
+                fileNameSpan.textContent = file ? file.name : 'No file chosen';
+            }
+
+            if (file && file.type.startsWith('image/')) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    if (!imagePreview) {
+                        imagePreview = document.createElement('img');
+                        imagePreview.id = 'handora-category-image';
+                        imageBox.appendChild(imagePreview);
+                    }
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+});
+</script>
+
+{% else %}
+
+<div class="handora-content-wrapper">
+    <a href="{% url 'admin_categories' %}" class="handora-back-link">← BACK</a>
+
+    <div class="handora-card">
+        <form method="post" enctype="multipart/form-data" class="handora-form">
+            {% csrf_token %}
+
+            <div class="handora-form-row">
+                <div class="handora-form-col">
+                    <label for="{{ form.name.id_for_label }}">Name</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                    <span class="handora-error">{{ form.name.errors }}</span>
+                    {% endif %}
+                </div>
+                <div class="handora-form-col">
+                    <label for="{{ form.slug.id_for_label }}">Slug</label>
+                    {{ form.slug }}
+                    {% if form.slug.errors %}
+                    <span class="handora-error">{{ form.slug.errors }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="handora-form-row">
+                <div class="handora-form-col-full">
+                    <label for="{{ form.description.id_for_label }}">Description</label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                    <span class="handora-error">{{ form.description.errors }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="handora-form-row">
+                <div class="handora-form-col">
+                    <label for="{{ form.image.id_for_label }}">Image</label>
+                    {{ form.image }}
+                    {% if form.image.errors %}
+                    <span class="handora-error">{{ form.image.errors }}</span>
+                    {% endif %}
+                    {% if category and category.image %}
+                    <div class="handora-image-preview">
+                        <img src="{{ category.image.url }}" alt="{{ category.name }}">
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="handora-form-actions">
+                <button type="submit" class="handora-btn handora-btn-primary">Save</button>
+                <a href="{% url 'admin_categories' %}" class="handora-btn handora-btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endif %}
+{% endblock %}

@@ -1,0 +1,441 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order Confirmed - Handora{% endblock %}
+
+{% block content %}
+
+<div class="order-success-page">
+
+    <div class="order-success-container">
+
+        <!-- ================================================= -->
+        <!-- SUCCESS HEADER -->
+        <!-- ================================================= -->
+
+        <div class="order-success-header">
+
+            <div class="success-icon">
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="64"
+                    height="64"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+
+                    <path
+                        d="M22 11.08V12a10 10 0 1 1-5.93-9.14"
+                    ></path>
+
+                    <polyline
+                        points="22 4 12 14.01 9 11.01"
+                    ></polyline>
+
+                </svg>
+
+            </div>
+
+
+            <h1 class="success-title">
+                Order Confirmed
+            </h1>
+
+
+            <p class="success-subtitle">
+
+                {% if order.payment_method == 'COD' %}
+
+                    Your order has been placed successfully.
+                    Cash on Delivery.
+
+                {% elif order.payment_status == 'Paid' %}
+
+                    Thank you for your order.
+                    Your payment has been processed successfully.
+
+                {% else %}
+
+                    Your order has been placed successfully.
+
+                {% endif %}
+
+            </p>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ORDER DETAILS -->
+        <!-- ================================================= -->
+
+        <div class="order-details-card">
+
+            <!-- Order ID -->
+
+            <div class="order-details-row">
+
+                <span class="order-details-label">
+                    Order ID
+                </span>
+
+                <span class="order-details-value">
+                    #{{ order.id }}
+                </span>
+
+            </div>
+
+
+            <!-- Date -->
+
+            <div class="order-details-row">
+
+                <span class="order-details-label">
+                    Date
+                </span>
+
+                <span class="order-details-value">
+                    {{ order.created_at|date:"F d, Y" }}
+                </span>
+
+            </div>
+
+
+            <!-- Payment Status -->
+
+            <div class="order-details-row">
+
+                <span class="order-details-label">
+                    Payment Status
+                </span>
+
+                <span class="order-details-value">
+
+                    <span
+                        class="status-badge status-{{ order.payment_status|lower }}"
+                    >
+                        {{ order.get_payment_status_display }}
+                    </span>
+
+                </span>
+
+            </div>
+
+
+            <!-- Order Status -->
+
+            <div class="order-details-row">
+
+                <span class="order-details-label">
+                    Order Status
+                </span>
+
+                <span class="order-details-value">
+
+                    <span
+                        class="status-badge status-{{ order.status|lower }}"
+                    >
+                        {{ order.get_status_display }}
+                    </span>
+
+                </span>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- PAYMENT METHOD -->
+            <!-- ================================================= -->
+
+            <div class="order-details-row">
+
+                <span class="order-details-label">
+                    Payment Method
+                </span>
+
+                <span class="order-details-value">
+
+                    {% if order.payment_method == 'COD' %}
+
+                        Cash on Delivery
+
+                    {% elif order.payment_method == 'razorpay_upi' %}
+
+                        Razorpay - UPI
+
+                    {% elif order.payment_method == 'razorpay_card' %}
+
+                        Razorpay - Card
+
+                    {% elif order.payment_method == 'razorpay_netbanking' %}
+
+                        Razorpay - Net Banking
+
+                    {% elif order.payment_method == 'razorpay_wallet' %}
+
+                        Razorpay - Wallet
+
+                    {% elif order.payment_method == 'razorpay_emi' %}
+
+                        Razorpay - EMI
+
+                    {% elif order.payment_method == 'RAZORPAY' %}
+
+                        Razorpay
+
+                    {% else %}
+
+                        {{ order.get_payment_method_display }}
+
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- RAZORPAY PAYMENT ID -->
+            <!-- ================================================= -->
+
+            {% if order.razorpay_payment_id %}
+
+            <div class="order-details-row">
+
+                <span class="order-details-label">
+                    Razorpay Payment ID
+                </span>
+
+                <span
+                    class="order-details-value"
+                    style="
+                        font-size: 0.85rem;
+                        word-break: break-all;
+                    "
+                >
+                    {{ order.razorpay_payment_id }}
+                </span>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- Total -->
+
+            <div class="order-details-row">
+
+                <span class="order-details-label">
+                    Total Amount
+                </span>
+
+                <span class="order-details-value">
+                    Rs.{{ order.total_amount|floatformat:2 }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- CUSTOMER INFORMATION -->
+        <!-- ================================================= -->
+
+        <div class="order-section">
+
+            <h2 class="order-section-title">
+                Customer Information
+            </h2>
+
+
+            <div class="shipping-info">
+
+                <div class="shipping-name">
+                    {{ order.full_name }}
+                </div>
+
+
+                <div class="shipping-email">
+                    Email: {{ order.email }}
+                </div>
+
+
+                <div class="shipping-phone">
+                    Phone: {{ order.phone }}
+                </div>
+
+
+                <div class="shipping-address">
+
+                    {{ order.address }}
+
+                    {% if order.apartment %}
+                        , {{ order.apartment }}
+                    {% endif %}
+
+                    <br>
+
+                    {{ order.city }},
+                    {{ order.state }}
+                    {{ order.pincode }}
+
+                    <br>
+
+                    {{ order.country }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ORDERED PRODUCTS -->
+        <!-- ================================================= -->
+
+        <div class="order-section">
+
+            <h2 class="order-section-title">
+                Ordered Products
+            </h2>
+
+
+            <table class="order-items-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Product
+                        </th>
+
+                        <th>
+                            Quantity
+                        </th>
+
+                        <th>
+                            Price
+                        </th>
+
+                        <th>
+                            Subtotal
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for item in order.items.all %}
+
+                    <tr>
+
+                        <td>
+
+                            <div class="order-item-product">
+
+                                {% if item.product.image %}
+
+                                    <img
+                                        src="{{ item.product.image.url }}"
+                                        alt="{{ item.product.name }}"
+                                    >
+
+                                {% else %}
+
+                                    <div class="placeholder-image-small">
+
+                                        <span>
+                                            {{ item.product.name|first }}
+                                        </span>
+
+                                    </div>
+
+                                {% endif %}
+
+
+                                <span class="item-name">
+                                    {{ item.product.name }}
+                                </span>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+                            {{ item.quantity }}
+                        </td>
+
+
+                        <td>
+                            ₹{{ item.price|floatformat:2 }}
+                        </td>
+
+
+                        <td>
+                            ₹{{ item.subtotal|floatformat:2 }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="4"
+                            style="text-align:center;"
+                        >
+                            No products found.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- FOOTER BUTTONS -->
+        <!-- ================================================= -->
+
+        <div class="order-success-footer">
+
+            <a
+                href="{% url 'home' %}"
+                class="btn-secondary"
+            >
+                Continue Shopping
+            </a>
+
+
+            <a
+                href="{% url 'generate_bill' order.id %}"
+                class="btn-primary"
+            >
+                🧾 Download Bill (PDF)
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

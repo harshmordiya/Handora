@@ -1,0 +1,153 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block title %}Handora Admin - Products{% endblock %}
+
+{% block page_title %}Manage Products{% endblock %}
+
+{% block content %}
+<div class="handora-content-wrapper">
+    <div class="handora-page-actions">
+        <form method="get" class="handora-search-form-inline">
+            <input type="text" name="search" value="{{ search_query }}" placeholder="Search products..." class="handora-form-input handora-form-input-sm">
+            <button type="submit" class="handora-btn handora-btn-sm handora-btn-outline">Search</button>
+            {% if search_query %}
+            <a href="?search=" class="handora-btn handora-btn-sm handora-btn-outline">Clear</a>
+            {% endif %}
+        </form>
+        <a href="{% url 'admin_product_add' %}" class="handora-btn handora-btn-primary">
+            + Add Product
+        </a>
+    </div>
+
+    <div class="handora-table-wrapper">
+        <table class="handora-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Discount</th>
+                    <th>Availability</th>
+                    <th>Featured</th>
+                    <th>Bestseller</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{ product.id }}</td>
+                    <td>
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="handora-product-thumb">
+                        {% else %}
+                        <span class="handora-text-muted">No image</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.category.name }}</td>
+                    <td>₹{{ product.price|floatformat:2 }}</td>
+                    <td>
+                        <form method="post" action="{% url 'admin_product_update_discount' product.id %}" class="discount-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="page" value="{{ products.number }}">
+                            {% if search_query %}<input type="hidden" name="search" value="{{ search_query }}">{% endif %}
+                            <input type="number" name="discount_percent" value="{{ product.discount_percent|default:0 }}" min="0" max="100" step="0.01" class="discount-input" onchange="this.form.submit()">
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" action="{% url 'admin_product_update_availability' product.id %}" class="availability-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="page" value="{{ products.number }}">
+                            {% if search_query %}<input type="hidden" name="search" value="{{ search_query }}">{% endif %}
+                            <select name="is_available" class="availability-select" onchange="this.form.submit()">
+                                <option value="1" {% if product.is_available %}selected{% endif %}>Available</option>
+                                <option value="0" {% if not product.is_available %}selected{% endif %}>Unavailable</option>
+                            </select>
+                        </form>
+                    </td>
+                    <td>
+                        {% if product.is_featured %}
+                        <span class="handora-badge handora-badge-success">Yes</span>
+                        {% else %}
+                        <span class="handora-badge">No</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if product.is_bestseller %}
+                        <span class="handora-badge handora-badge-success">Yes</span>
+                        {% else %}
+                        <span class="handora-badge">No</span>
+                        {% endif %}
+                    </td>
+                    <td class="handora-action-cell" style="vertical-align: middle !important;">
+                        <div class="handora-action-buttons">
+                            <a href="{% url 'admin_product_edit' product.id %}?page={{ products.number }}{% if search_query %}*&*search={{ search_query }}{% endif %}"
+                            class="handora-btn handora-btn-sm handora-btn-outline">
+                                Edit
+                            </a>
+
+                            <a href="{% url 'admin_product_delete' product.id %}"
+                            class="handora-btn handora-btn-sm handora-btn-danger">
+                                Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="handora-text-center">No products found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if products.has_other_pages %}
+    <div class="handora-pagination">
+        {% if products.has_previous %}
+        <a href="?page={{ products.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" class="handora-pagination-link">&laquo; Prev</a>
+        {% endif %}
+        {% for page in products.paginator.page_range %}
+        {% if products.number == page %}
+        <span class="handora-pagination-link active">{{ page }}</span>
+        {% else %}
+        <a href="?page={{ page }}{% if search_query %}&search={{ search_query }}{% endif %}" class="handora-pagination-link">{{ page }}</a>
+        {% endif %}
+        {% endfor %}
+        {% if products.has_next %}
+        <a href="?page={{ products.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" class="handora-pagination-link">Next &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<style>
+     .handora-table .handora-action-cell {
+        vertical-align:  !important;
+        padding-top: 0 !important;
+        padding-bottom: 60px !important;
+    } 
+
+
+   .handora-table .handora-action-buttons {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        gap: 8px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        transform: translateY(20px) !important;
+}
+
+   .handora-table .handora-action-buttons .handora-btn {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        position: static !important;
+}
+</style>
+
+{% endblock %}

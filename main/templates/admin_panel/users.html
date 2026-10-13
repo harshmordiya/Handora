@@ -1,0 +1,87 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block title %}Handora Admin - Users{% endblock %}
+
+{% block page_title %}Manage Users{% endblock %}
+
+{% block content %}
+<div class="handora-content-wrapper">
+    <div class="handora-page-actions">
+        <form method="get" class="handora-search-form-inline">
+            <input type="text" name="search" value="{{ search_query }}" placeholder="Search users..." class="handora-form-input handora-form-input-sm">
+            <button type="submit" class="handora-btn handora-btn-sm handora-btn-outline">Search</button>
+            {% if search_query %}
+            <a href="?search=" class="handora-btn handora-btn-sm handora-btn-outline">Clear</a>
+            {% endif %}
+        </form>
+        <a href="{% url 'admin_user_add' %}" class="handora-btn handora-btn-primary">
+            + Add User
+        </a>
+    </div>
+
+    <div class="handora-table-wrapper">
+        <table class="handora-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Mobile</th>
+                    <th>Email</th>
+                    <th>Staff</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>
+                        {% if user.profile.phone %}
+                        {{ user.profile.phone }}
+                        {% else %}
+                        <span class="handora-text-muted">N/A</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ user.email|default:"N/A" }}</td>
+                    <td>
+                        {% if user.is_staff %}
+                        <span class="handora-badge handora-badge-success">Yes</span>
+                        {% else %}
+                        <span class="handora-badge">No</span>
+                        {% endif %}
+                    </td>
+                    <td class="handora-action-cell">
+                        <a href="{% url 'admin_user_edit' user.id %}" class="handora-btn handora-btn-sm handora-btn-outline">Edit</a>
+                        <a href="{% url 'admin_user_delete' user.id %}" class="handora-btn handora-btn-sm handora-btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="handora-text-center">No users found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if users.has_other_pages %}
+    <div class="handora-pagination">
+        {% if users.has_previous %}
+        <a href="?page={{ users.previous_page_number }}" class="handora-pagination-link">&laquo; Prev</a>
+        {% endif %}
+        {% for page in users.paginator.page_range %}
+        {% if users.number == page %}
+        <span class="handora-pagination-link active">{{ page }}</span>
+        {% else %}
+        <a href="?page={{ page }}" class="handora-pagination-link">{{ page }}</a>
+        {% endif %}
+        {% endfor %}
+        {% if users.has_next %}
+        <a href="?page={{ users.next_page_number }}" class="handora-pagination-link">Next &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

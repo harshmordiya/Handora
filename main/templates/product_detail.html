@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - handora{% endblock %}
+
+{% block content %}
+
+<div class="back-link-row">
+    <a href="{% url 'category' product.category.slug %}" class="back-link">&larr; Back to {{ product.category.name }}</a>
+</div>
+
+<div class="product-detail-page">
+    <div class="product-detail-container">
+
+        <!-- Product Images -->
+        <div class="product-detail-images">
+            {% if product.rating and product.rating > 0 %}
+            <div class="product-rating-badge">
+                <span class="rating-number">{{ product.rating|floatformat:1 }}</span>
+                <span class="rating-star">★</span>
+            </div>
+            {% endif %}
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="main-image">
+            {% else %}
+            <div class="placeholder-image detail-placeholder">
+                <span>{{ product.name|first }}</span>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Product Info -->
+        <div class="product-detail-info">
+            <h1 class="product-detail-title">{{ product.name }}</h1>
+
+            <div class="product-detail-price">
+                            {% if product.discount_percent and product.discount_percent > 0 %}
+                                <span class="discounted-price">₹{{ product.final_price|floatformat:2 }}</span>
+                                <span class="mrp-label">M.R.P.</span>
+                                <span class="original-price">₹{{ product.price|floatformat:2 }}</span>
+                                <span class="discount-percent">{{ product.discount_percent|floatformat:0 }}% OFF</span>
+                            {% else %}
+                                ₹{{ product.price|floatformat:2 }}
+                            {% endif %}
+                        </div>
+
+            {% if product.is_bestseller %}
+            <span class="product-badge badge-best">Best Seller</span>
+            {% endif %}
+            {% if product.is_featured %}
+            <span class="product-badge badge-featured">Featured</span>
+            {% endif %}
+            {% if not product.is_available %}
+            <span class="product-badge badge-unavailable">✕ Unavailable</span>
+            {% endif %}
+
+            <div class="product-description">
+                <p>{{ product.description|linebreaks }}</p>
+            </div>
+
+            <div class="product-meta">
+                <p><strong>Category:</strong> <a href="{% url 'category' product.category.slug }}">{{ product.category.name }}</a></p>
+                <p><strong>Material:</strong> Handcrafted from premium natural materials</p>
+                <p><strong>Care:</strong> Spot clean only. Avoid prolonged exposure to moisture.</p>
+            </div>
+
+            {% if product.is_available %}
+            <form method="post" action="{% url 'add_to_cart' product.id %}" class="product-actions">
+                {% csrf_token %}
+                <div class="qty-selector">
+                    <button type="button" class="qty-btn" onclick="updateQty(-1)">−</button>
+                    <input type="number" name="quantity" value="1" min="1" max="15" class="qty-value" id="qty-input">
+                    <button type="button" class="qty-btn" onclick="updateQty(1)">+</button>
+                </div>
+                <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+            </form>
+            {% else %}
+            <div class="product-unavailable">
+                <span class="unavailable-label">Currently Unavailable</span>
+            </div>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+            <form method="post" action="{% if in_wishlist %}{% url 'remove_from_wishlist' product.id %}{% else %}{% url 'add_to_wishlist' product.id %}{% endif %}" class="wishlist-form-detail">
+                {% csrf_token %}
+                <button type="submit" class="wishlist-heart {% if in_wishlist %}filled{% endif %}" title="Toggle Wishlist">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="{% if in_wishlist %}currentColor{% else %}none{% endif %}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.21 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5 0 3.71-3.4 6.86-10.55 13.85L12 21.35z"/></svg>
+                </button>
+                <span class="wishlist-text">Add to Wishlist</span>
+            </form>
+            {% else %}
+            <a href="{% url 'login' %}?next={% url 'product_detail' product.slug %}" class="wishlist-heart" title="Login to add to Wishlist">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.21 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5 0 3.71-3.4 6.86-10.55 13.85L12 21.35z"/></svg>
+            </a>
+            <span class="wishlist-text">Add to Wishlist</span>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+<!-- Related Products -->
+{% if related_products %}
+<section class="related-products-section">
+    <h2 class="section-title">You May Also Like</h2>
+    <div class="product-grid related-grid">
+        {% for product in related_products %}
+        <div class="product-card">
+            <div class="product-image">
+                <a href="{% url 'product_detail' product.slug %}" class="product-image-link">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    {% else %}
+                        <div class="placeholder-image">
+                            <span>{{ product.name|first }}</span>
+                        </div>
+                    {% endif %}
+                </a>
+
+                {% if product.is_bestseller %}
+                <span class="product-badge badge-best">Best Seller</span>
+                {% endif %}
+                {% if product.is_featured %}
+                <span class="product-badge badge-featured">Featured</span>
+                {% endif %}
+            </div>
+
+            <div class="product-info">
+                <a href="{% url 'product_detail' product.slug %}" class="product-name">
+                    {{ product.name|truncatechars:30 }}
+                </a>
+                <div class="product-price">₹{{ product.price }}</div>
+
+                <form method="post" action="{% url 'add_to_cart' product.id %}" class="add-to-cart-form">
+                    {% csrf_token %}
+                    <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function updateQty(change) {
+        var input = document.getElementById('qty-input');
+        var value = parseInt(input.value, 10) || 1;
+        value += change;
+        if (value < 1) value = 1;
+        if (value > 15) value = 15;
+        input.value = value;
+    }
+
+    document.getElementById('qty-input').addEventListener('change', function() {
+        var value = parseInt(this.value, 10);
+        if (isNaN(value) || value < 1) {
+            this.value = 1;
+        } else if (value > 15) {
+            this.value = 15;
+        }
+    });
+</script>
+{% endblock %}

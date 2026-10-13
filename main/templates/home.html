@@ -1,0 +1,488 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}handora - Handmade with Love{% endblock %}
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+    .handora-body-font { font-family: 'Inter', sans-serif; }
+    .handora-logo-font { font-family: 'Playfair Display', serif; letter-spacing: 6px; }
+    .handora-hero-font { font-family: 'Playfair Display', serif; }
+
+    /* ===== Explore Collection Section ===== */
+    .handora-explore-section {
+        padding: 4rem 0;
+        text-align: center;
+        background: #fff;
+    }
+
+    .handora-explore-inner {
+        max-width: 720px;
+        margin: 0 auto;
+    }
+
+    .handora-explore-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #7B2D26;
+        margin-bottom: 1rem;
+    }
+
+    .handora-explore-text {
+        color: #5c3a36;
+        font-size: 1.05rem;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+    }
+
+    /* ===== Why Choose Handora Section ===== */
+    .handora-features-section {
+        padding: 4rem 0;
+        background: #fff;
+    }
+
+    .handora-features-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .handora-feature-card {
+        background: #fff;
+        border-radius: 12px;
+        border: 1px solid #eee;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .handora-feature-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: #FDF6E9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .handora-feature-title {
+        font-family: 'Inter', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 0.75rem;
+    }
+
+    .handora-feature-text {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: #5c3a36;
+    }
+
+    @media (max-width: 768px) {
+        .handora-features-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .handora-explore-section,
+        .handora-features-section {
+            padding: 3rem 0;
+        }
+
+        .handora-explore-title {
+            font-size: 1.75rem;
+        }
+
+        .handora-features-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .handora-feature-card {
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ==================== HERO BANNER (Updated) ==================== -->
+<section class="handora-hero-banner" style="background: #FDF6E9;">
+    <div class="handora-hero-grid" style="display: grid; grid-template-columns: 1fr 1fr; min-height: 350px; align-items: center;">
+
+        <!-- Left Content -->
+        <div class="handora-hero-left" style="padding: 20px 30px;">
+            <h1 class="handora-hero-font" style="font-size: 1.8rem; color: #7B2D26; line-height: 1.25; margin-bottom: 12px;">
+                Crafted by Hand<br>Cherished Forever
+            </h1>
+            
+            <p style="color: #5c3a36; font-size: 1.05rem; line-height: 1.7; margin-bottom: 18px;">
+                In a world of mass production, people still cherish the uniqueness and originality of handcrafted products. At Handora, 
+                we bring you authentic handmade treasures across Home Decor & Art, Textile & Clothing, Accessories, and 
+                Wooden Crafts — carefully created by skilled Indian artisans and delivered right to your doorstep.
+            </p>
+            
+             <p style="color: #5c3a36; font-size: 1.05rem; line-height: 1.7; margin-bottom: 24px;">
+                We aim to provide a platform for Handloom Weavers and Handicraft Artisans to sell their traditional products online, 
+                supporting their financial and  social empowerment while keeping India's timeless craft legacy alive.
+            </p>
+
+            <a href="{% url 'about' %}" class="handora-hero-cta" 
+               style="display: inline-block; background: #7B2D26; color: white; padding: 12px 28px; 
+                      text-decoration: none; font-size: 0.95rem; letter-spacing: 1px; border-radius: 4px;
+                      transition: background 0.3s;">
+                Know More
+            </a>
+        </div>
+
+        <!-- Right Image -->
+        <div class="handora-hero-right" style="height: 100%;">
+            <img src="https://images.unsplash.com/photo-1506806732259-39c2d0268443?w=800&auto=format&fit=crop&q=60" 
+                 alt="Indian Artisan" 
+                 style="width: 100%; height: 100%; object-fit: cover; min-height: 350px;">
+        </div>
+
+    </div>
+</section>
+
+<!-- ==================== FEATURES BAR (Updated) ==================== -->
+    <section style="background: #fff; border-bottom: 1px solid #f0e6d8; padding: 20px 0;">
+    <div class="handora-container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center;">
+
+            <!-- Easy Returns -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                 <div style="width: 44px; height: 44px; background: #FDF6E9; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7B2D26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="1 4 1 10 7 10"></polyline>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                </div>
+                <span style="font-size: 0.95rem; font-weight: 500; color: #7B2D26;">Easy Returns</span>
+            </div>
+
+            <!-- Safe & Secure Payment -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                 <div style="width: 44px; height: 44px; background: #FDF6E9; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7B2D26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                        <line x1="1" y1="10" x2="23" y2="10"></line>
+                    </svg>
+                </div>
+                <span style="font-size: 0.95rem; font-weight: 500; color: #7B2D26;">Safe & Secure Payment</span>
+            </div>
+
+            <!-- Free Shipping -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                 <div style="width: 44px; height: 44px; background: #FDF6E9; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7B2D26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="15" height="13"></rect>
+                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                        <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                        <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                    </svg>
+                </div>
+                <span style="font-size: 0.95rem; font-weight: 500; color: #7B2D26;">Free Shipping</span>
+            </div>
+
+            <!-- Authentic Sellers -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                 <div style="width: 44px; height: 44px; background: #FDF6E9; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7B2D26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <span style="font-size: 0.95rem; font-weight: 500; color: #7B2D26;">Authentic Sellers</span>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ==================== SHOP BY CATEGORY ==================== -->
+<section class="handora-categories-section">
+    <div class="handora-container">
+        <h2 class="handora-section-title handora-hero-font">Shop by Category</h2>
+
+        <div class="handora-categories-grid">
+            {% for cat in categories %}
+            <a href="{% url 'category' cat.slug %}" class="handora-category-card">
+                <div class="handora-category-image">
+                    {% if cat.image %}
+                    <img src="{{ cat.image.url }}" alt="{{ cat.name }}" class="handora-category-img{% if cat.slug == 'wooden-craft' %} handora-category-img-contain{% endif %}">
+                    {% else %}
+                    <div class="handora-category-placeholder">
+                        <span>{{ cat.name|first }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="handora-category-body">
+                    <span class="handora-category-tag">{{ cat.name }}</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ==================== FEATURED PRODUCTS ==================== -->
+<section id="products" class="handora-products-section">
+    <div class="handora-container">
+        {% if featured_products %}
+        <h2 class="handora-section-title handora-hero-font">Featured Products</h2>
+        <div class="handora-products-grid">
+            {% for product in featured_products %}
+            <div class="handora-product-card">
+                <div class="handora-product-image">
+                    <a href="{% url 'product_detail' product.slug %}">
+                        {% if product.rating and product.rating > 0 %}
+                            <div class="product-rating-badge">
+                                <span class="rating-number">{{ product.rating|floatformat:1 }}</span>
+                                <span class="rating-star">★</span>
+                            </div>
+                        {% endif %}
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="handora-product-img">
+                        {% else %}
+                        <div class="handora-product-placeholder">
+                            <span>{{ product.name|first }}</span>
+                        </div>
+                        {% endif %}
+                    </a>
+                    {% if product.is_bestseller %}<span class="handora-badge handora-badge-bestseller">Bestseller</span>{% endif %}
+                    {% if product.is_featured %}<span class="handora-badge handora-badge-featured">Featured</span>{% endif %}
+                    <div class="handora-product-actions">
+                        <a href="{% url 'product_detail' product.slug %}" class="handora-btn-icon" title="Quick View">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </a>
+                        <form method="post" action="{% url 'add_to_wishlist' product.id %}" class="handora-wishlist-form-mini">
+                            {% csrf_token %}
+                            <button type="submit" class="handora-btn-icon" title="Add to Wishlist">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 0 5.5 5.5 0 0 0 0 7.78l.14.14L12 21.35l7.71-7.71.14-.14a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="handora-product-body">
+                    <a href="{% url 'product_detail' product.slug %}" class="handora-product-name">{{ product.name|truncatechars:35 }}</a>
+                    <div class="handora-product-price">
+                        {% if product.discount_percent and product.discount_percent > 0 %}
+                            <span class="original-price">₹{{ product.price|floatformat:2 }}</span>
+                            <span class="discounted-price">₹{{ product.final_price|floatformat:2 }}</span>
+                            <span class="discount-badge">{{ product.discount_percent|floatformat:0 }}% OFF</span>
+                        {% else %}
+                            ₹{{ product.price|floatformat:2 }}
+                        {% endif %}
+                    </div>
+                    <form method="post" action="{% url 'add_to_cart' product.id %}" class="handora-add-to-cart-form">
+                        {% csrf_token %}
+                        <button type="submit" class="handora-btn handora-btn-primary">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if bestsellers %}
+        <h2 class="handora-section-title handora-hero-font">Best Sellers</h2>
+        <div class="handora-products-grid">
+            {% for product in bestsellers %}
+            <div class="handora-product-card">
+                <div class="handora-product-image">
+                    <a href="{% url 'product_detail' product.slug %}">
+                        {% if product.rating and product.rating > 0 %}
+                            <div class="product-rating-badge">
+                                <span class="rating-number">{{ product.rating|floatformat:1 }}</span>
+                                <span class="rating-star">★</span>
+                            </div>
+                        {% endif %}
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="handora-product-img">
+                        {% else %}
+                        <div class="handora-product-placeholder">
+                            <span>{{ product.name|first }}</span>
+                        </div>
+                        {% endif %}
+                    </a>
+                    <span class="handora-badge handora-badge-best">Best Seller</span>
+                    <div class="handora-product-actions">
+                        <a href="{% url 'product_detail' product.slug %}" class="handora-btn-icon" title="Quick View">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </a>
+                        <form method="post" action="{% url 'add_to_wishlist' product.id %}" class="handora-wishlist-form-mini">
+                            {% csrf_token %}
+                            <button type="submit" class="handora-btn-icon" title="Add to Wishlist">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 0 5.5 5.5 0 0 0 0 7.78l.14.14L12 21.35l7.71-7.71.14-.14a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="handora-product-body">
+                    <a href="{% url 'product_detail' product.slug %}" class="handora-product-name">{{ product.name|truncatechars:35 }}</a>
+                    <div class="handora-product-price">
+                        {% if product.discount_percent and product.discount_percent > 0 %}
+                            <span class="original-price">₹{{ product.price|floatformat:2 }}</span>
+                            <span class="discounted-price">₹{{ product.final_price|floatformat:2 }}</span>
+                            <span class="discount-badge">{{ product.discount_percent|floatformat:0 }}% OFF</span>
+                        {% else %}
+                            ₹{{ product.price|floatformat:2 }}
+                        {% endif %}
+                    </div>
+                    <form method="post" action="{% url 'add_to_cart' product.id %}" class="handora-add-to-cart-form">
+                        {% csrf_token %}
+                        <button type="submit" class="handora-btn handora-btn-primary">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if latest_products %}
+        <h2 class="handora-section-title handora-hero-font">New Arrivals</h2>
+        <div class="handora-products-grid">
+            {% for product in latest_products %}
+            <div class="handora-product-card">
+                <div class="handora-product-image">
+                    <a href="{% url 'product_detail' product.slug %}">
+                        {% if product.rating and product.rating > 0 %}
+                            <div class="product-rating-badge">
+                                <span class="rating-number">{{ product.rating|floatformat:1 }}</span>
+                                <span class="rating-star">★</span>
+                            </div>
+                        {% endif %}
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="handora-product-img">
+                        {% else %}
+                        <div class="handora-product-placeholder">
+                            <span>{{ product.name|first }}</span>
+                        </div>
+                        {% endif %}
+                    </a>
+                    <span class="handora-badge handora-badge-new">New</span>
+                    <div class="handora-product-actions">
+                        <a href="{% url 'product_detail' product.slug %}" class="handora-btn-icon" title="Quick View">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </a>
+                        <form method="post" action="{% url 'add_to_wishlist' product.id %}" class="handora-wishlist-form-mini">
+                            {% csrf_token %}
+                            <button type="submit" class="handora-btn-icon" title="Add to Wishlist">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 0 5.5 5.5 0 0 0 0 7.78l.14.14L12 21.35l7.71-7.71.14-.14a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="handora-product-body">
+                    <a href="{% url 'product_detail' product.slug %}" class="handora-product-name">{{ product.name|truncatechars:35 }}</a>
+                    <div class="handora-product-price">
+                        {% if product.discount_percent and product.discount_percent > 0 %}
+                            <span class="original-price">₹{{ product.price|floatformat:2 }}</span>
+                            <span class="discounted-price">₹{{ product.final_price|floatformat:2 }}</span>
+                            <span class="discount-badge">{{ product.discount_percent|floatformat:0 }}% OFF</span>
+                        {% else %}
+                            ₹{{ product.price|floatformat:2 }}
+                        {% endif %}
+                    </div>
+                    <form method="post" action="{% url 'add_to_cart' product.id %}" class="handora-add-to-cart-form">
+                        {% csrf_token %}
+                        <button type="submit" class="handora-btn handora-btn-primary">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- ==================== EXPLORE COLLECTION ==================== -->
+<section class="handora-explore-section">
+    <div class="handora-container">
+        <div class="handora-explore-inner">
+            <h2 class="handora-explore-title handora-hero-font">Explore Our Collection</h2>
+            <p class="handora-explore-text">Discover unique handmade products crafted with care by skilled artisans.</p>
+            {% if categories.first %}
+            <a href="{% url 'category' categories.first.slug %}" class="handora-btn handora-btn-primary">Explore Products</a>
+            {% else %}
+            <a href="{% url 'home' %}" class="handora-btn handora-btn-primary">Explore Products</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- ==================== TESTIMONIALS ==================== -->
+<section class="handora-testimonial-section">
+    <div class="handora-container">
+        <h2 class="handora-section-title handora-hero-font handora-section-center">What Our Customers Say</h2>
+        <div class="handora-testimonial-grid">
+            <div class="handora-testimonial-card">
+                <div class="handora-testimonial-stars">★★★★★</div>
+                <p class="handora-testimonial-text">"Beautiful handcrafted products. The quality is amazing and the delivery was super fast!"</p>
+                <div class="handora-testimonial-author">— Priya M.</div>
+            </div>
+            <div class="handora-testimonial-card">
+                <div class="handora-testimonial-stars">★★★★★</div>
+                <p class="handora-testimonial-text">"I bought a wooden craft for my living room. Everyone who visits asks about it!"</p>
+                <div class="handora-testimonial-author">— Rahul S.</div>
+            </div>
+            <div class="handora-testimonial-card">
+                <div class="handora-testimonial-stars">★★★★★</div>
+                <p class="handora-testimonial-text">"Supporting artisans through handora is the best decision. Love every piece I own."</p>
+                <div class="handora-testimonial-author">— Ananya K.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== WHY CHOOSE HANDORA ==================== -->
+<section class="handora-features-section">
+    <div class="handora-container">
+        <h2 class="handora-section-title handora-hero-font">Why Choose Handora?</h2>
+        <div class="handora-features-grid">
+            <div class="handora-feature-card">
+                <div class="handora-feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7B2D26" stroke-width="2"><path d="M12 22s-6-6.5-6-10a6 6 0 1 1 12 0C18 15.5 12 22 12 22z"/><circle cx="12" cy="9" r="3"/></svg>
+                </div>
+                <h3 class="handora-feature-title">Handmade with Care</h3>
+                <p class="handora-feature-text">Every product is crafted with attention to detail and care.</p>
+            </div>
+            <div class="handora-feature-card">
+                <div class="handora-feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7B2D26" stroke-width="2"><path d="M12 2l3.09 6.91L22 9.09l-5 4.89 1.18 6.88L12 17.77l-6.18 3.2 1.18-6.88z"/></svg>
+                </div>
+                <h3 class="handora-feature-title">Unique Designs</h3>
+                <p class="handora-feature-text">Discover beautiful handmade products with their own unique character.</p>
+            </div>
+            <div class="handora-feature-card">
+                <div class="handora-feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7B2D26" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <h3 class="handora-feature-title">Supporting Artisans</h3>
+                <p class="handora-feature-text">Your purchases help support skilled artisans and traditional craftsmanship.</p>
+            </div>
+            <div class="handora-feature-card">
+                <div class="handora-feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7B2D26" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                </div>
+                <h3 class="handora-feature-title">Secure Shopping</h3>
+                <p class="handora-feature-text">Enjoy a simple and secure shopping experience with COD and Razorpay.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Checkout - Handora{% endblock %}
+
+{% block content %}
+<div class="checkout-page">
+    <h1 class="checkout-title">Complete Order</h1>
+
+    {% if cart_items %}
+    <div class="checkout-container">
+        <!-- LEFT SIDE: Customer Details Form -->
+        <div class="checkout-form-section">
+            <form method="post" class="checkout-form" id="checkout-form">
+                {% csrf_token %}
+
+                <h2>Buyer Details</h2>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            readonly
+                            placeholder="you@example.com"
+                            value="{% if checkout_data.email %}{{ checkout_data.email }}{% elif user.email %}{{ user.email }}{% endif %}">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="first_name">First Name *</label>
+
+                        <input
+                            type="text"
+                            id="first_name"
+                            name="first_name"
+                            required
+                            readonly
+                            placeholder="First name"
+                            value="{{ checkout_data.first_name|default:'' }}">
+                    </div>
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="last_name">Last Name *</label>
+
+                        <input
+                            type="text"
+                            id="last_name"
+                            name="last_name"
+                            required
+                            readonly
+                            placeholder="Last name"
+                            value="{{ checkout_data.last_name|default:'' }}">
+                    </div>
+
+                </div>
+                <h2>Contact Information</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="full_name">Full Name *</label>
+                        <input type="text" id="full_name" name="full_name" required placeholder="Full name for delivery" readonly
+                               value="{{ checkout_data.first_name|default:'' }} {{ checkout_data.last_name|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="text" id="phone" name="phone" required readonly placeholder="10-digit mobile number"
+                               value="{{ checkout_data.phone|default:'' }}">
+                    </div>
+                </div>
+
+                <h2>Address Details</h2>
+                <div class="form-group">
+                    <label for="address">Street Address *</label>
+                    <textarea id="address" name="address" rows="2" required placeholder="Enter your complete address">{{ checkout_data.address|default:'' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="apartment">Apartment / Suite (optional)</label>
+                    <input type="text" id="apartment" name="apartment" placeholder="Apartment, suite, unit, etc."
+                           value="{{ checkout_data.apartment|default:'' }}">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">City *</label>
+                        <input type="text" id="city" name="city" required value="{{ checkout_data.city|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="pincode">Pincode / Postal Code *</label>
+                        <input type="text" id="pincode" name="pincode" required placeholder="6 digits"
+                               value="{{ checkout_data.pincode|default:'' }}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="state">State *</label>
+                        <input type="text" id="state" name="state" required value="{{ checkout_data.state|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Country *</label>
+                        <select id="country" name="country" required>
+                            <option value="India" {% if checkout_data.country == 'India' or not checkout_data.country %}selected{% endif %}>India</option>
+                            <option value="United States" {% if checkout_data.country == 'United States' %}selected{% endif %}>United States</option>
+                            <option value="United Kingdom" {% if checkout_data.country == 'United Kingdom' %}selected{% endif %}>United Kingdom</option>
+                            <option value="Canada" {% if checkout_data.country == 'Canada' %}selected{% endif %}>Canada</option>
+                            <option value="Australia" {% if checkout_data.country == 'Australia' %}selected{% endif %}>Australia</option>
+                            <option value="Other" {% if checkout_data.country == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Full Name auto-fill -->
+                <div class="form-group checkout-button-wrapper">
+                    <button type="submit" class="checkout-btn">
+                        Continue to Payment
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- RIGHT SIDE: Order Summary -->
+        <div class="checkout-summary">
+            <h2>Your Items</h2>
+            <div class="order-items">
+                {% for item in cart_items %}
+                <div class="order-item">
+                    <div class="order-item-img">
+                        {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                        {% else %}
+                        <div class="placeholder-image-small">
+                            <span>{{ item.product.name|first }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="order-item-info">
+                        <span class="order-item-name">{{ item.product.name|truncatechars:30 }}</span>
+                        <span class="order-item-qty">Qty: {{ item.quantity }}</span>
+                    </div>
+                    <span class="order-item-price">Rs.{{ item.total|floatformat:2 }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="order-total">
+                <span>Subtotal:</span>
+                <span>Rs.{{ total|floatformat:2 }}</span>
+            </div>
+            <div class="order-total">
+                <span>Shipping:</span>
+                <span>Free</span>
+            </div>
+            <div class="order-grand-total">
+                <span>Total:</span>
+                <strong>Rs.{{ total|floatformat:2 }}</strong>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="checkout-empty">
+        <p>Your cart is empty.</p>
+        <a href="{% url 'home' %}" class="btn-primary">Start Shopping</a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    function updateFullName() {
+        var firstName = document.getElementById('first_name').value;
+        var lastName = document.getElementById('last_name').value;
+        document.getElementById('full_name').value = (firstName + ' ' + lastName).trim();
+    }
+    document.getElementById('first_name').addEventListener('input', updateFullName);
+    document.getElementById('last_name').addEventListener('input', updateFullName);
+    updateFullName();
+</script>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Shipping Info - handora{% endblock %}
+
+{% block content %}
+<section class="page-section">
+    <h1>Shipping Information</h1>
+
+    <div class="info-grid">
+        <div class="info-card">
+            <div class="about-icon">🚚</div>
+            <h3>We Deliver Across India</h3>
+            <p>We partner with reliable courier services to ensure your handmade purchases reach you safely anywhere in India. International shipping is available to select countries during checkout.</p>
+        </div>
+
+        <div class="info-card">
+            <div class="about-icon">⏰</div>
+            <h3>Estimated Delivery Time</h3>
+            <p><strong>Major Cities:</strong> 2-4 business days<br><strong>Tier II & III Cities:</strong> 4-6 business days<br><strong>Remote Areas:</strong> 6-8 business days</p>
+        </div>
+
+        <div class="info-card">
+            <div class="about-icon">💰</div>
+            <h3>Shipping Charges</h3>
+            <p><strong>Orders above Rs. 999:</strong> Free shipping<br><strong>Orders below Rs. 999:</strong> Rs. 79<br><strong>Express Shipping:</strong> Rs. 149 (select locations)</p>
+        </div>
+    </div>
+
+    <h2 class="info-subtitle">Order Processing Time</h2>
+    <p>All orders are processed within 1-2 business days after payment confirmation. During sale periods, holidays, or high-demand periods, please allow an additional 1-2 days for processing. You will receive a shipping confirmation email with a tracking number once your order has been dispatched.</p>
+
+    <h2 class="info-subtitle">Tracking Information</h2>
+    <p>After your order ships, a tracking number will be sent to your email and SMS. Click the tracking link in your email or visit the courier's website directly to check your package status. You can also track orders from your Handora account dashboard at any time.</p>
+
+    <h2 class="info-subtitle">Delayed Delivery</h2>
+    <p>If your order is delayed beyond the estimated delivery time, we recommend first checking the tracking information online. If there is still no update, please contact our support team with your order number and tracking details. We will investigate with the courier partner and provide you with an updated delivery estimate.</p>
+
+    <h2 class="info-subtitle">Contact for Shipping Problems</h2>
+    <p>Packaging damaged or delivery issues? Our support team is ready to help. Email us at <a href="mailto:support@handora.in">support@handora.in</a> with your order number, or use our <a href="{% url 'contact' %}">Contact Us</a> form. Include photos of any damaged packaging for faster resolution.</p>
+</section>
+{% endblock %}

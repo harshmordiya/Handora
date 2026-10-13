@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <title>Order Confirmation - Handora</title>
+</head>
+
+<body style="margin:0; padding:0; background:#f7f3ef; font-family:Arial, sans-serif;">
+
+    <div style="max-width:650px; margin:30px auto; background:#ffffff; border-radius:10px; overflow:hidden;">
+
+        <div style="background:#7b2d26; padding:25px; text-align:center;">
+            <h1 style="color:#ffffff; margin:0; letter-spacing:4px;">
+                HANDORA
+            </h1>
+
+            <p style="color:#ffffff; margin:8px 0 0;">
+                Handmade • With Love
+            </p>
+        </div>
+
+        <div style="padding:30px;">
+
+            <h2 style="color:#7b2d26;">
+                Order Confirmation
+            </h2>
+
+            <p>
+                Hello {{ customer_name }},
+            </p>
+
+            <p>
+                Thank you for shopping with Handora.
+                Your order has been successfully placed.
+            </p>
+
+            <div style="background:#f7f3ef; padding:20px; border-radius:8px; margin:20px 0;">
+
+                <p>
+                    <strong>Order ID:</strong>
+                    #{{ order.id }}
+                </p>
+
+                <p>
+                    <strong>Payment Status:</strong>
+                    Paid
+                </p>
+
+                <p>
+                    <strong>Order Date:</strong>
+                    {{ order.created_at|date:"d M Y, h:i A" }}
+                </p>
+
+            </div>
+
+            <!-- Receipt Button -->
+
+            <div style="text-align:center; margin:30px 0;">
+
+                <a href="#bill"
+                    style="
+                    display:inline-block;
+                    background:#7b2d26;
+                    color:#ffffff;
+                    text-decoration:none;
+                    padding:14px 25px;
+                    border-radius:6px;
+                    font-weight:bold;
+                    font-size:15px;
+                    ">
+                        📄 Download Bill (PDF)
+                </a>
+            </div>
+
+            <div style="
+                background:#f7f3ef;
+                border-left:4px solid #7b2d26;
+                padding:15px 20px;
+                margin:25px 0;
+            ">
+
+                <p style="
+                    margin-top:12px;
+                    color:#555555;
+                    font-size:14px;
+                    text-align:center;
+                ">
+                    Your bill PDF is attached to this email.
+                    You can open or download it directly from the attachment.
+                </p>
+
+            </div>
+
+            <p>
+                Your order has been confirmed successfully.
+            </p>
+
+            <p>
+                Thank you for choosing Handora.
+            </p>
+
+        </div>
+
+        <div style="background:#7b2d26; padding:15px; text-align:center;">
+
+            <p style="color:#ffffff; margin:0;">
+                Handora — Handmade With Love
+            </p>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

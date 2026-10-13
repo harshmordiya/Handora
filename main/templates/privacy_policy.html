@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Privacy Policy - handora{% endblock %}
+
+{% block content %}
+<section class="page-section">
+    <h1>Privacy Policy</h1>
+
+    <p>At Handora, we are committed to protecting your personal information and your right to privacy. This Privacy Policy explains what data we collect, how we use it, and your rights regarding that data. Please read this policy carefully before using our website or services.</p>
+
+    <h2 class="info-subtitle">Information We Collect</h2>
+    <p>We collect information you provide directly to us, including:</p>
+    <ul class="policy-list">
+        <li><strong>Personal identification data:</strong> Name, email address, phone number, shipping and billing address</li>
+        <li><strong>Account information:</strong> Username and password for your Handora account</li>
+        <li><strong>Order information:</strong> Products purchased, order history, delivery instructions, and preferences</li>
+        <li><strong>Payment information:</strong> Processed securely by our payment partners; we do not store full card or bank details on our servers</li>
+    </ul>
+
+    <h2 class="info-subtitle">How We Use Your Information</h2>
+    <p>We use your information to:</p>
+    <ul class="policy-list">
+        <li>Process and fulfill your orders</li>
+        <li>Send order confirmations, shipping updates, and delivery notifications</li>
+        <li>Provide and improve customer support</li>
+        <li>Personalize your shopping experience and recommend relevant products</li>
+        <li>Send promotional communications (only if you have opted in)</li>
+    </ul>
+
+    <h2 class="info-subtitle">Account Information</h2>
+    <p>To create an account, we require your name, email, and a secure password. You may access and update your account information at any time from your account dashboard. We use industry-standard encryption to protect your credentials.</p>
+
+    <h2 class="info-subtitle">Order Information</h2>
+    <p>We retain your order history, shipping addresses, and transaction records for order fulfillment, returns processing, and accounting purposes. This data is stored securely and retained only as long as necessary for legitimate business purposes.</p>
+
+    <h2 class="info-subtitle">Payment Information</h2>
+    <p>All payment transactions are processed directly by our PCI-DSS compliant payment gateway partners (such as Razorpay). Handora does not store your full card number, CVV, or bank credentials on our servers. We only store transaction references and payment status for order management.</p>
+
+    <h2 class="info-subtitle">Cookies</h2>
+    <p>We use cookies and similar tracking technologies to enhance your browsing experience, analyze site traffic, and remember your preferences. You may disable cookies in your browser settings, though this may affect site functionality and personalization.</p>
+
+    <h2 class="info-subtitle">Data Security</h2>
+    <p>We implement reasonable security measures including encrypted connections (HTTPS), secure servers, and access controls to protect your personal data. While no method of transmission over the internet is 100% secure, we strive to use industry-standard safeguards to protect your information.</p>
+
+    <h2 class="info-subtitle">Third-Party Services</h2>
+    <p>We may share your information with trusted third parties who assist us in operating our website, processing payments, delivering orders, and analyzing site performance. These parties are contractually bound to maintain confidentiality. We are not responsible for the privacy practices of external websites linked from ours.</p>
+
+    <h2 class="info-subtitle">Your Rights</h2>
+    <p>You have the right to access, correct, or request deletion of your personal information. You may also opt out of marketing communications at any time by clicking the unsubscribe link in our emails or contacting us directly.</p>
+
+    <h2 class="info-subtitle">Contact Information</h2>
+    <p>If you have questions about this Privacy Policy, please contact us at our <a href="{% url 'contact' %}">Contact Us</a> form. We will respond to your inquiry within 48 business hours.</p>
+</section>
+{% endblock %}

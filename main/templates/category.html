@@ -1,0 +1,488 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ category.name }} - handora{% endblock %}
+
+{% block content %}
+<div class="category-page">
+    <div class="handora-container">
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Home</a>
+            <span>/</span>
+            <span>{{ category.name }}</span>
+        </div>
+
+        <!-- Page Header -->
+        <div class="category-header">
+            <h1 class="category-title">{{ category.name }}</h1>
+            <p class="category-count">{{ products | length }} items</p>
+        </div>
+
+        <div class="category-layout">
+
+            <!-- LEFT SIDEBAR (Filters) -->
+        <div class="category-sidebar-wrapper">
+            <aside class="category-sidebar">
+                <h3>Filters</h3>
+
+                <div class="filter-box">
+                    <h4>Price</h4>
+                    <ul class="filter-list">
+                        <li><a href="?sort=default">All Prices</a></li>
+                        <li><a href="?sort=price_low">Low to High</a></li>
+                        <li><a href="?sort=price_high">High to Low</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+
+            <!-- RIGHT CONTENT -->
+            <div class="category-content">
+
+                <!-- Sort Bar -->
+                <div class="sort-bar">
+                    <span class="result-text">
+                        Showing {{ products | length }} products
+                    </span>
+
+                    <div class="sort-dropdown">
+                        <label>Sort By:</label>
+                        <select onchange="location = this.value;">
+                            <option value="?sort=Discount" {% if sort_by == 'Discount' or not sort_by %}selected{% endif %}>
+                                Discount
+                            </option>
+
+                            <option value="?sort=default" {% if sort_by == 'default' or not sort_by %}selected{% endif %}>
+                                Default
+                            </option>
+
+                            <option value="?sort=price_low" {% if sort_by == 'price_low' %}selected{% endif %}>
+                                Price Low to High
+                            </option>
+
+                            <option value="?sort=price_high" {% if sort_by == 'price_high' %}selected{% endif %}>
+                                Price High to Low
+                            </option>
+
+                            <option value="?sort=newest" {% if sort_by == 'newest' %}selected{% endif %}>
+                                Newest
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Product Grid -->
+                <div class="product-grid">
+
+                    {% for product in products %}
+
+                    <div class="product-card">
+
+                        <!-- Product Image -->
+                        <div class="product-image">
+
+                            <a href="{% url 'product_detail' product.slug %}" class="product-image-link">
+
+                                {% if product.image %}
+                                    <img
+                                        src="{{ product.image.url }}"
+                                        alt="{{ product.name }}"
+                                        class="{% if not product.is_available %}unavailable-product-image{% endif %}"
+                                    >
+                                {% else %}
+                                    <div class="placeholder-image">
+                                        <span>{{ product.name|first }}</span>
+                                    </div>
+                                {% endif %}
+
+                            </a>
+
+                            <!-- Unavailable Badge -->
+                            {% if not product.is_available %}
+                                <span class="unavailable-badge">UNAVAILABLE</span>
+                            {% endif %}
+
+                            {% if product.is_bestseller %}
+                                <span class="product-badge badge-best">Best Seller</span>
+                            {% endif %}
+
+                            {% if product.is_featured %}
+                                <span class="product-badge badge-featured">Featured</span>
+                            {% endif %}
+
+                            <!-- Product Actions -->
+                            <div class="product-actions">
+
+                                <!-- Quick View -->
+                                <a
+                                    href="{% url 'product_detail' product.slug %}"
+                                    class="action-btn"
+                                    title="Quick View"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                    >
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </a>
+
+                                <!-- Wishlist -->
+                                {% if user.is_authenticated %}
+
+                                <form
+                                    method="post"
+                                    action="{% url 'add_to_wishlist' product.id %}"
+                                    class="wishlist-form-inline"
+                                >
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="action-btn wishlist-heart {% if product.in_wishlist %}filled{% endif %}"
+                                        title="Add to Wishlist"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 24 24"
+                                            fill="{% if product.in_wishlist %}currentColor{% else %}none{% endif %}"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                        >
+                                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 0 5.5 5.5 0 0 0 0 7.78l.14.14L12 21.35l7.71-7.71.14-.14a5.5 5.5 0 0 0 0-7.78z"/>
+                                        </svg>
+                                    </button>
+                                </form>
+
+                                {% else %}
+
+                                <a
+                                    href="{% url 'login' %}?next={% url 'category' category.slug %}"
+                                    class="action-btn"
+                                    title="Login to add to Wishlist"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                    >
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 0 5.5 5.5 0 0 0 0 7.78l.14.14L12 21.35l7.71-7.71.14-.14a5.5 5.5 0 0 0 0-7.78z"/>
+                                    </svg>
+                                </a>
+
+                                {% endif %}
+
+                            </div>
+                        </div>
+
+                        <!-- Product Information -->
+                        <div class="product-info">
+
+                            <a
+                                href="{% url 'product_detail' product.slug %}"
+                                class="product-name"
+                            >
+                                {{ product.name|truncatechars:30 }}
+                            </a>
+
+                            <!-- Rating -->
+                            {% if product.rating and product.rating > 0 %}
+                                <div class="product-rating">
+                                    <span class="rating-star">★</span>
+                                    <span class="rating-number">
+                                        {{ product.rating|floatformat:1 }}
+                                    </span>
+                                </div>
+                            {% endif %}
+
+                            <!-- Product Price -->
+                            <div class="product-price">
+
+                                {% if product.discount_percent and product.discount_percent > 0 %}
+
+                                    <span class="discounted-price">
+                                        ₹{{ product.final_price|floatformat:2 }}
+                                    </span>
+
+                                    <span class="mrp-label">
+                                        M.R.P.
+                                    </span>
+
+                                    <span class="original-price">
+                                        ₹{{ product.price|floatformat:2 }}
+                                    </span>
+
+                                    <span class="discount-percent">
+                                        {{ product.discount_percent|floatformat:0 }}% OFF
+                                    </span>
+
+                                {% else %}
+
+                                    ₹{{ product.price|floatformat:2 }}
+
+                                {% endif %}
+
+                            </div>
+
+                            <!-- Add to Cart -->
+                            {% if product.is_available %}
+
+                            <form
+                                method="post"
+                                action="{% url 'add_to_cart' product.id %}"
+                                class="add-to-cart-form"
+                            >
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="add-to-cart-btn"
+                                >
+                                    Add to Cart
+                                </button>
+
+                            </form>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    {% empty %}
+
+                    <div class="no-products">
+                        <p>No products found in this category.</p>
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+                <!-- Pagination -->
+                {% if products.paginator.num_pages > 1 %}
+
+                <div class="handora-pagination">
+
+                    {% if products.has_previous %}
+                        <a
+                            href="?page={{ products.previous_page_number }}"
+                            class="handora-page-btn"
+                        >
+                            &laquo; Prev
+                        </a>
+                    {% endif %}
+
+                    {% for num in products.paginator.page_range %}
+
+                        {% if products.number == num %}
+
+                            <span class="handora-page-btn handora-page-active">
+                                {{ num }}
+                            </span>
+
+                        {% else %}
+
+                            <a
+                                href="?page={{ num }}"
+                                class="handora-page-btn"
+                            >
+                                {{ num }}
+                            </a>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                    {% if products.has_next %}
+                        <a
+                            href="?page={{ products.next_page_number }}"
+                            class="handora-page-btn"
+                        >
+                            Next &raquo;
+                        </a>
+                    {% endif %}
+
+                </div>
+
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Product Availability Styling -->
+<style>
+
+    .product-image {
+        position: relative;
+    }
+
+   .category-sidebar-wrapper {
+        position: relative;
+        width: 238px;
+        flex-shrink: 0;
+    }
+
+    .category-sidebar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 100;
+    }
+
+    .unavailable-product-image {
+        opacity: 0.45;
+        filter: blur(1.5px) grayscale(20%);
+        transition: opacity 0.2s ease, filter 0.2s ease;
+    }
+
+    .unavailable-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        z-index: 20;
+
+        background: #e57373;
+        color: #ffffff;
+
+        padding: 6px 12px;
+        border-radius: 5px;
+
+        font-size: 14px;
+        font-weight: 600;
+
+        pointer-events: none;
+    }
+
+    /* Product Rating */
+    .product-rating {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 7px;
+        margin-bottom: 8px;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    .product-rating .rating-star {
+        font-size: 16px;
+        line-height: 1;
+    }
+
+    .product-rating .rating-number {
+        line-height: 1;
+    }
+
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const wrapper = document.querySelector('.category-sidebar-wrapper');
+    const sidebar = document.querySelector('.category-sidebar');
+    const layout = document.querySelector('.category-layout');
+
+    if (!wrapper || !sidebar || !layout) {
+        return;
+    }
+
+    let originalTop = 0;
+    let sidebarHeight = 0;
+
+    function calculatePosition() {
+        // Reset temporarily to calculate original position
+        sidebar.style.position = 'absolute';
+        sidebar.style.top = '0';
+        sidebar.style.left = '0';
+        sidebar.style.width = '100%';
+
+        const wrapperRect = wrapper.getBoundingClientRect();
+
+        originalTop = wrapperRect.top + window.scrollY;
+        sidebarHeight = sidebar.offsetHeight;
+    }
+
+    function updateSidebar() {
+
+        const scrollTop = window.scrollY;
+
+        const layoutRect = layout.getBoundingClientRect();
+        const layoutBottom = layoutRect.bottom + scrollTop;
+
+        /*
+         * Keep Filters at the same screen position
+         * where it originally appears.
+         */
+        const fixedTop = 340;
+
+        /*
+         * Start fixed only after normal position
+         * reaches the fixed position.
+         */
+        const startFixedAt = originalTop - fixedTop;
+
+        /*
+         * Stop before category section ends.
+         */
+        const stopAt = layoutBottom - sidebarHeight - fixedTop;
+
+        if (scrollTop < startFixedAt) {
+
+            // Original position
+            sidebar.style.position = 'absolute';
+            sidebar.style.top = '0';
+            sidebar.style.left = '0';
+            sidebar.style.width = '100%';
+
+        } else if (scrollTop <= stopAt) {
+
+            // Fixed position
+            const wrapperRect = wrapper.getBoundingClientRect();
+
+            sidebar.style.position = 'fixed';
+            sidebar.style.top = fixedTop + 'px';
+            sidebar.style.left = wrapperRect.left + 'px';
+            sidebar.style.width = wrapperRect.width + 'px';
+
+        } else {
+
+            // Stop at category section bottom
+            sidebar.style.position = 'absolute';
+            sidebar.style.top =
+                (layout.offsetHeight - sidebarHeight) + 'px';
+            sidebar.style.left = '0';
+            sidebar.style.width = '100%';
+        }
+    }
+
+    calculatePosition();
+    updateSidebar();
+
+    window.addEventListener('scroll', updateSidebar);
+
+    window.addEventListener('resize', function () {
+        calculatePosition();
+        updateSidebar();
+    });
+});
+</script>
+
+{% endblock %}

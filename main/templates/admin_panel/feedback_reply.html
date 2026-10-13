@@ -1,0 +1,38 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block title %}Handora Admin - Reply to Feedback{% endblock %}
+
+{% block page_title %}Reply to Feedback{% endblock %}
+
+{% block content %}
+<div class="handora-content-wrapper">
+    <a href="{% url 'admin_feedback' %}" class="handora-back-link">&larr; BACK</a>
+
+    <div class="handora-card">
+        <h4>Original Message</h4>
+        <table class="handora-order-info-table">
+            <tr><td>Name</td><td>{{ msg.name }}</td></tr>
+            <tr><td>Email</td><td>{{ msg.email }}</td></tr>
+            <tr><td>Subject</td><td>{{ msg.subject|default:"N/A" }}</td></tr>
+            <tr><td>Submitted</td><td>{{ msg.submitted_at|date:"M d, Y h:i A" }}</td></tr>
+            <tr><td>Message</td><td>{{ msg.message|linebreaks }}</td></tr>
+        </table>
+    </div>
+
+    <div class="handora-card">
+        <h4>Compose Reply</h4>
+        <form method="post" action="{% url 'admin_feedback_reply' msg.id %}">
+            {% csrf_token %}
+            <div class="handora-form-row">
+                <label for="id_response">Your Response:</label>
+                <textarea name="response" id="id_response" class="handora-form-textarea" rows="8" placeholder="Type your reply here...">{{ response_text|default:'' }}</textarea>
+            </div>
+            <div class="handora-form-actions">
+                <button type="submit" class="handora-btn handora-btn-primary">Send Reply</button>
+                <a href="{% url 'admin_feedback' %}" class="handora-btn handora-btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

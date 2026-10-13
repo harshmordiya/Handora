@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Your Wishlist - handora{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #DBC2AD;
+    }
+    .wishlist-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+    .wishlist-header h1 {
+        font-size: 1.8rem;
+        color: #232f3e;
+        margin: 0;
+    }
+    .wishlist-header a {
+        color: #c65d3b;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .wishlist-empty {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: #777;
+    }
+    .wishlist-empty a {
+        color: #c65d3b;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .btn-view {
+        display: block;
+        text-align: center;
+        background: #7B2D26;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.95rem;
+        padding: 10px 20px;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        transition: background 0.3s;
+    }
+    .btn-view:hover {
+        background: #5e201a;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="wishlist-page">
+    <div class="wishlist-header">
+        <h1>Your Wishlist</h1>
+        <a href="{% url 'home' %}">Continue Shopping</a>
+    </div>
+
+    {% if wishlist_items %}
+    <div class="product-grid">
+        {% for item in wishlist_items %}
+        <div class="product-card">
+            <form method="post" action="{% url 'remove_from_wishlist' item.product.id %}" class="remove-form">
+                {% csrf_token %}
+                <button type="submit" class="remove-btn" title="Remove from wishlist">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.21 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.71-3.4 6.86-10.55 13.85L12 21.35z"/></svg>
+                </button>
+            </form>
+            <div class="product-image">
+                {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                {% else %}
+                    <div class="placeholder-image">No Image</div>
+                {% endif %}
+            </div>
+            <div class="product-info">
+                <h3>{{ item.product.name|truncatechars:40 }}</h3>
+                <p class="product-desc">{{ item.product.description|truncatechars:80 }}</p>
+                <div class="product-price">₹{{ item.product.price }}</div>
+                <a href="{% url 'product_detail' item.product.slug %}" class="btn-view">View Product</a>
+                <form method="post" action="{% url 'add_to_cart' item.product.id %}" class="add-to-cart-form">
+                    {% csrf_token %}
+                    <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="wishlist-empty">
+        <div class="wishlist-empty-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.21 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.71-3.4 6.86-10.55 13.85L12 21.35z"/></svg>
+        </div>
+        <h3 style="margin-bottom: 0.5rem; color: #333;">Your wishlist is empty</h3>
+        <p style="margin-bottom: 1rem; color: #777;">Browse our products and add your favorites to your wishlist!</p>
+        <a href="{% url 'home' %}">Start Shopping</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.querySelectorAll('.remove-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            if (!confirm('Remove this item from your wishlist?')) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+{% endblock %}

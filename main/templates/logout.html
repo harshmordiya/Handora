@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Logged Out - handora{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-box">
+        <div class="auth-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#7B2D26" stroke-width="2"><path d="M9 21a2 2 0 1 1-4.41-.29A2 2 0 0 1 6 19V9a6 6 0 0 1 12 0v1.17"/><rect x="12" y="10" width="7" height="7" rx="1"/><line x1="15" y1="13" x2="15" y2="13"/></svg>
+        </div>
+        <h1 class="auth-title">You have been logged out</h1>
+        <p class="auth-subtitle">Thank you for visiting handora. Your session has ended securely.</p>
+        <a href="{% url 'login' %}" class="auth-btn">Sign In Again</a>
+
+        <div class="auth-links">
+            <p>Don't have an account? <a href="{% url 'register' %}">Create Account</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

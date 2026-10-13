@@ -1,0 +1,47 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handora Admin - Login</title>
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+<body class="handora-login-page">
+    <div class="handora-login-card">
+        <div class="handora-login-logo">
+            <img src="{% static 'images/handora-logo.png' %}" alt="Handora">
+        </div>
+        <h1 class="handora-login-brand">HANDORA</h1>
+        <h2 class="handora-login-subtitle">Admin Login</h2>
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="handora-login-error">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <form method="post" action="{% url 'admin_login' %}" id="login-form">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+
+            <div class="handora-form-group">
+                <label for="id_username">Username</label>
+                <input type="text" name="username" id="id_username" class="handora-form-input" placeholder="Enter your username" required autofocus autocomplete="username">
+            </div>
+
+            <div class="handora-form-group">
+                <label for="id_password">Password</label>
+                <input type="password" name="password" id="id_password" class="handora-form-input" placeholder="Enter your password" required autocomplete="current-password">
+            </div>
+
+            <div class="handora-form-group">
+                <button type="submit" class="handora-btn handora-btn-primary handora-btn-login">
+                    LOG IN
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

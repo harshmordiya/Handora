@@ -1,0 +1,90 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block title %}Handora Admin - Order #{{ order.id }}{% endblock %}
+
+{% block page_title %}Order #{{ order.id }}{% endblock %}
+
+{% block content %}
+<div class="handora-content-wrapper">
+    <a href="{% url 'admin_orders' %}" class="handora-back-link">← BACK</a>
+
+    <div class="handora-card handora-order-detail">
+        <div class="handora-order-sections">
+            <div class="handora-order-section">
+                <h4>Customer Information</h4>
+                <table class="handora-order-info-table">
+                    <tr><td>Name</td><td>{{ order.full_name }}</td></tr>
+                    <tr><td>Email</td><td>{{ order.email|default:"N/A" }}</td></tr>
+                    <tr><td>Phone</td><td>{{ order.phone }}</td></tr>
+                </table>
+            </div>
+
+            <div class="handora-order-section">
+                <h4>Shipping Address</h4>
+                <table class="handora-order-info-table">
+                    <tr><td>Address</td><td>{{ order.address }}{% if order.apartment %}, {{ order.apartment }}{% endif %}</td></tr>
+                    <tr><td>City</td><td>{{ order.city }}</td></tr>
+                    <tr><td>State</td><td>{{ order.state }}</td></tr>
+                    <tr><td>Country</td><td>{{ order.country }}</td></tr>
+                    <tr><td>Pincode</td><td>{{ order.pincode }}</td></tr>
+                </table>
+            </div>
+
+            <div class="handora-order-section">
+                <h4>Payment & Status</h4>
+                <table class="handora-order-info-table">
+                    <tr><td>Total Amount</td><td>₹{{ order.total_amount|floatformat:2 }}</td></tr>
+                    <tr><td>Payment Method</td><td>{{ order.get_payment_method_display }}</td></tr>
+                    <tr><td>Payment Status</td><td><span class="handora-badge handora-badge-{{ order.payment_status|lower }}">{{ order.get_payment_status_display }}</span></td></tr>
+                    <tr><td>Order Status</td><td><span class="handora-badge handora-badge-{{ order.status|lower }}">{{ order.get_status_display }}</span></td></tr>
+                    <tr><td>Order Date</td><td>{{ order.created_at|date:"M d, Y h:i A" }}</td></tr>
+                </table>
+
+                <form method="post" action="{% url 'admin_order_update_status' order.id %}" class="handora-status-update-form">
+                    {% csrf_token %}
+                    <div class="handora-form-row handora-form-row-inline">
+                        <label for="id_status">Update Status:</label>
+                        <select name="status" id="id_status" class="handora-form-input handora-form-input-sm" style="max-width: 180px;">
+                            {% for value, label in order.STATUS_CHOICES %}
+                            <option value="{{ value }}" {% if order.status == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="handora-btn handora-btn-sm handora-btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="handora-order-items-section">
+            <h4>Order Items</h4>
+            <div class="handora-table-wrapper">
+                <table class="handora-table handora-table-sm">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>₹{{ item.price|floatformat:2 }}</td>
+                            <td>₹{{ item.subtotal|floatformat:2 }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="handora-text-center">No items found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

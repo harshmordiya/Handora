@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}OTP Verification - Handora{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cod-page {
+        background: #f7f7f7;
+        min-height: calc(100vh - 140px);
+        padding: 40px 20px;
+    }
+
+    .cod-page-inner {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .cod-card {
+        background: #fff;
+        border-radius: 14px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        padding: 36px;
+        border: 1px solid #e8e0d0;
+        text-align: center;
+    }
+
+    .cod-card h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #7B2D26;
+        margin-bottom: 8px;
+    }
+
+    .cod-card .cod-subtitle {
+        font-size: 0.95rem;
+        color: #666;
+        margin-bottom: 24px;
+        line-height: 1.5;
+    }
+
+    .cod-otp-input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1.5rem;
+        text-align: center;
+        letter-spacing: 8px;
+        outline: none;
+        background: #fff;
+        font-family: inherit;
+    }
+
+    .cod-otp-input:focus {
+        border-color: #7B2D26;
+    }
+
+    .cod-otp-input::placeholder {
+        color: #aaa;
+        letter-spacing: 4px;
+    }
+
+    .cod-btn {
+        width: 100%;
+        padding: 14px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 12px;
+        border: none;
+        background: #7B2D26;
+        color: #fff;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        margin-top: 16px;
+    }
+
+    .cod-btn:hover {
+        background: #5a1e19;
+    }
+
+    .cod-resend-link {
+        display: inline-block;
+        margin-top: 20px;
+        font-size: 0.9rem;
+        color: #7B2D26;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .cod-resend-link:hover {
+        text-decoration: underline;
+    }
+
+    .cod-error-alert {
+        background: #fff5f5;
+        border: 1px solid #feb1b1;
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 16px;
+    }
+
+    .cod-error-text {
+        color: #c53030;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .cod-success-alert {
+        background: #f0fff4;
+        border: 1px solid #9ae6b4;
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 16px;
+    }
+
+    .cod-success-text {
+        color: #38a169;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    button {
+        font-family: inherit;
+    }
+
+    .cod-back-link {
+        display: block;
+        text-align: center;
+        margin-top: 16px;
+        font-size: 0.9rem;
+        color: #7B2D26;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .cod-back-link:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cod-page">
+    <div class="cod-page-inner">
+
+        <div class="cod-card">
+            <h1>Enter OTP</h1>
+            <p class="cod-subtitle">
+                Please enter the 6-digit OTP sent to your email to verify your Cash on Delivery order.
+            </p>
+
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'error' %}
+            <div class="cod-error-alert">
+                <p class="cod-error-text">{{ message }}</p>
+            </div>
+            {% else %}
+            <div class="cod-success-alert">
+                <p class="cod-success-text">{{ message }}</p>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <input
+                    type="text"
+                    name="otp"
+                    id="id_otp"
+                    class="cod-otp-input"
+                    placeholder="••••••"
+                    maxlength="6"
+                    inputmode="numeric"
+                    pattern="[0-9]{6}"
+                    required
+                    autocomplete="one-time-code"
+                >
+
+                <button type="submit" class="cod-btn">Verify OTP</button>
+            </form>
+
+            <a href="{% url 'cod_resend' %}" class="cod-resend-link">Resend OTP</a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

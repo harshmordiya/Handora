@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}handora - Handmade with Love{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'images/handora-logo.png' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+
+
+    <style>
+    .handora-header {
+        position: sticky;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        background: #ffffff;
+    }
+
+    {% comment %} .handora-main {
+        padding-top: var(--header-height, 0px);
+    } {% endcomment %}
+</style>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+<header class="handora-header">
+    <div class="handora-header-inner">
+
+        <!-- LEFT: Logo -->
+        <div class="handora-header-left">
+            <a href="{% url 'home' %}" class="handora-logo brand-link">
+                <img src="{% static 'images/handora-logo.png' %}"
+                     alt="Handora Logo"
+                     class="brand-logo">
+                <span class="brand-name">HANDORA</span>
+            </a>
+        </div>
+
+        <!-- RIGHT: Navigation -->
+        {% block header_nav %}
+        <div class="handora-header-right">
+
+            <!-- Categories Dropdown -->
+            <div class="handora-dropdown">
+
+                <button class="handora-dropdown-btn">
+                    Categories
+
+                <svg
+                    class="handora-dropdown-arrow"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 9l-7 7-7-7">
+                </svg>
+                </button>
+
+            <div class="handora-dropdown-menu">
+
+                {% for cat in categories %}
+
+                <a
+                    href="{% url 'category' cat.slug %}"
+                    class="handora-dropdown-item">
+
+                    {{ cat.name }}
+
+                </a>
+
+                {% endfor %}
+
+            </div>
+
+            </div>
+
+
+            <!-- About -->
+            <div class="about">
+                    <a href="{% url 'about'%}" class="handora-dropdown-item">About us</a>
+            </div>
+
+
+            {% if user.is_authenticated %}
+
+                <!-- Account -->
+                <div class="handora-dropdown">
+
+                    <button class="handora-dropdown-btn">
+                        Account
+
+                        <svg
+                            class="handora-dropdown-arrow"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24">
+
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M19 9l-7 7-7-7">
+                        </path>
+
+                        </svg>
+                    </button>
+
+                    <div class="handora-dropdown-menu">
+
+                        <span
+                            class="handora-dropdown-item"
+                            style="cursor:default;">
+
+                            Hello, {{ user.username }}
+
+                        </span>
+
+                        <form
+                            method="post"
+                            action="{% url 'logout' %}"
+                            class="handora-logout-form">
+
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                class="handora-dropdown-item handora-logout-btn">
+
+                                Logout
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <!-- Wishlist -->
+                <a href="{% url 'wishlist' %}"
+                   class="handora-wishlist-link">
+
+                    <svg
+                        class="handora-wishlist-icon"
+                        fill="{% if wishlist_count %}currentColor{% else %}none{% endif %}"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24">
+
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.21 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.71-3.4 6.86-10.55 13.85L12 21.35z">
+                        </path>
+
+                    </svg>
+
+                    {% if wishlist_count %}
+
+                    <span class="handora-badge">
+                        {{ wishlist_count }}
+                    </span>
+
+                    {% endif %}
+
+                </a>
+
+            {% else %}
+
+                <!-- Login -->
+                <a href="{% url 'login' %}"
+                   class="handora-header-link">
+
+                    Login
+
+                </a>
+
+                <!-- Sign Up -->
+                <a href="{% url 'register' %}"
+                   class="handora-header-link">
+
+                    Sign Up
+
+                </a>
+
+            {% endif %}
+
+
+            <!-- Cart -->
+            <a href="{% url 'cart_view' %}"
+               class="handora-cart-link">
+
+                <svg
+                    class="handora-cart-icon"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.5"
+                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z">
+                </path>
+
+                </svg>
+
+                {% if cart_count %}
+
+                <span class="handora-badge">
+                    {{ cart_count }}
+                </span>
+
+                {% endif %}
+
+            </a>
+
+        </div>
+        {% endblock %}
+
+    </div>
+
+    <!-- ROW 2: Search Bar -->
+    {% block search_bar %}
+    <div class="handora-search">
+        <form action="{% url 'search' %}"
+              method="GET"
+              class="handora-search-form">
+
+            <input
+                type="text"
+                name="q"
+                value="{{ request.GET.q|default:'' }}"
+                placeholder="Seek unique handmade pieces..."
+                aria-label="Search products"
+            >
+
+            <button type="submit" class="handora-search-btn">
+                <svg fill="none"
+                     stroke="currentColor"
+                     viewBox="0 0 24 24">
+
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z">
+                </svg>
+            </button>
+        </form>
+    </div>
+
+    <!-- ROW 3: Category Navigation -->
+    <nav class="handora-categories">
+
+        {% for cat in categories %}
+
+        <a href="{% url 'category' cat.slug %}"
+           class="handora-category-link">
+
+            {{ cat.name }}
+
+        </a>
+
+        {% endfor %}
+
+    </nav>
+    {% endblock %}
+
+</header>
+<main class="handora-main">
+
+    {% if messages %}
+
+    <div class="handora-messages">
+
+        {% for message in messages %}
+
+        <div class="handora-alert handora-alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+    {% block content %}{% endblock %}
+
+</main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="handora-footer">
+        <div class="handora-footer-inner">
+
+            <!-- Logo -->
+          {% load static %}
+
+            <div class="handora-footer-logo">
+                <div class="handora-brand-mark">
+                    <div><center class="handora-mark-name">HANDORA</center></div>
+                    <div class="handora-mark-divider"></div>
+                    <div class="handora-mark-text">HANDMADE • WITH LOVE</div>
+                </div>
+            </div>
+
+            <!-- Links -->
+            <div class="handora-footer-grid">
+                <div class="handora-footer-col">
+                    <h4>SHOP</h4>
+                    <ul>
+                        {% for cat in categories %}
+                        <li><a href="{% url 'category' cat.slug %}">{{ cat.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="handora-footer-col">
+                    <h4>INFO</h4>
+                    <ul>
+                        <li><a href="{% url 'about' %}">About Us</a></li>
+                        <li><a href="{% url 'faq' %}">Buyer FAQ</a></li>
+                        <li><a href="{% url 'shipping' %}">Shipping Info</a></li>
+                        <li><a href="{% url 'privacy_policy' %}">Privacy Policy</a></li>
+                        <li><a href="{% url 'terms' %}">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+
+                <div class="handora-footer-col">
+                    <h4>ABOUT</h4>
+                    <ul>
+                        
+                        <li><a href="{% url 'our_story' %}">Our Story</a></li>
+                        <li><a href="{% url 'our_commitment'%}">Our Commitment</a></li>
+                        <li><a href="{% url 'artisan_partners'%}">Artisan Partners</a></li>
+                        <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom -->
+            <div class="handora-footer-bottom">
+                <p>© 2026 handora — Handmade with Love</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        var dropdownBtns = document.querySelectorAll('.handora-dropdown-btn');
+        dropdownBtns.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var menu = this.nextElementSibling;
+                var isOpen = menu.classList.contains('handora-dropdown-open');
+                document.querySelectorAll('.handora-dropdown-menu').forEach(function(m) {
+                    m.classList.remove('handora-dropdown-open');
+                });
+                if (!isOpen) {
+                    menu.classList.add('handora-dropdown-open');
+                }
+            });
+        });
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.handora-dropdown-menu').forEach(function(m) {
+                m.classList.remove('handora-dropdown-open');
+            });
+        });
+    </script>
+    <script>
+        // Dynamic sticky offset calculation
+       (function() {
+        function updateHeaderHeight() {
+            var header = document.querySelector('.handora-header');
+
+            if (header) {
+                var headerHeight = header.offsetHeight;
+
+                document.documentElement.style.setProperty(
+                    '--header-height',
+                    headerHeight + 'px'
+                );
+
+                document.documentElement.style.setProperty(
+                    '--sticky-top-offset',
+                    headerHeight + 20 + 'px'
+                );
+            }
+        }
+
+        updateHeaderHeight();
+
+        window.addEventListener('resize', updateHeaderHeight);
+
+        if (document.fonts) {
+            document.fonts.ready.then(updateHeaderHeight);
+        }
+    })();
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

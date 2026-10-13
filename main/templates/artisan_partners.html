@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Artisan Partners - handora{% endblock %}
+
+{% block content %}
+<section class="page-section">
+    <h1>Artisan Partners</h1>
+    <p class="page-subtitle">Meet the hands behind the craft.</p>
+
+    <div class="artisan-intro">
+        <p>Handora's mission is built on a foundation of meaningful partnerships with local artisans. We are proud to collaborate with skilled craftspeople who keep traditional arts alive while creating beautiful, functional pieces for modern homes. Our network spans across India, connecting you with the finest handmade treasures from diverse craft communities.</p>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-card">
+            <div class="about-icon">🧵</div>
+            <h3>Textile Artisans</h3>
+            <p>Master weavers, embroiderers, and hand-printers who create exquisite fabrics using traditional techniques like ikat, block printing, chikankari, and kantha embroidery. Each thread tells a story of patience, skill, and cultural heritage.</p>
+        </div>
+
+        <div class="info-card">
+            <div class="about-icon">🪵</div>
+            <h3>Woodcraft Artisans</h3>
+            <p>Skilled woodworkers who carve intricate designs using traditional tools and age-old techniques. From decorative sculptures to functional furniture, each piece reflects the artisan's deep understanding of wood grain, form, and cultural symbolism.</p>
+        </div>
+
+        <div class="info-card">
+            <div class="about-icon">🏺</div>
+            <h3>Pottery & Ceramic Artisans</h3>
+            <p>Traditional potters who shape clay with their hands, using techniques passed down through generations. Each piece — from delicate tea sets to rustic serving bowls — is glazed and fired with care, creating functional art for your home.</p>
+        </div>
+
+        <div class="info-card">
+            <div class="about-icon">🎭</div>
+            <h3>Handicraft Makers</h3>
+            <p>A diverse community of artisans preserving other traditional Indian craft forms including metalwork, basket weaving, bell-making, and leather craft. Each represents a unique cultural tradition worth celebrating and preserving.</p>
+        </div>
+    </div>
+
+    <div class="artisan-heritage">
+        <h2>Preserving Traditional Skills</h2>
+        <p>Many traditional craft forms are at risk of disappearing as younger generations move away from artisanal work. At handora, we are committed to keeping these cultural techniques alive. By providing artisans with fair wages, a reliable marketplace, and the respect they deserve, we help ensure that the knowledge and skills of generations are not lost. When you buy from handora, you become part of a movement to preserve India's rich craft heritage for future generations.</p>
+    </div>
+
+    <div class="artisan-cta">
+        <a href="{% url 'home' %}" class="handora-btn handora-btn-primary">Shop Handmade</a>
+    </div>
+</section>
+{% endblock %}

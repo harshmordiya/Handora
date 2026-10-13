@@ -1,0 +1,29 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block title %}Handora Admin - Delete Product{% endblock %}
+
+{% block page_title %}Delete Product{% endblock %}
+
+{% block content %}
+<div class="handora-content-wrapper">
+    <a href="{% url 'admin_products' %}" class="handora-back-link">← BACK</a>
+
+    <div class="handora-card">
+        <p>Are you sure you want to delete the product "<strong>{{ product.name }}</strong>"?</p>
+        <p class="handora-warning-text">This action cannot be undone.</p>
+
+        {% if product.image %}
+        <div class="handora-delete-image-preview">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        </div>
+        {% endif %}
+
+        <form method="post" class="handora-form-actions">
+            {% csrf_token %}
+            <button type="submit" class="handora-btn handora-btn-danger">Yes, Delete</button>
+            <a href="{% url 'admin_products' %}" class="handora-btn handora-btn-outline">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

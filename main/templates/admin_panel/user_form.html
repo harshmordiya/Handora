@@ -1,0 +1,756 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block title %}Handora Admin - {{ action }} User{% endblock %}
+
+{% block extra_head %}
+<style>
+    :root {
+        --handora-admin-primary: #8B3028;
+        --handora-admin-primary-hover: #6e241f;
+        --handora-admin-bg: #f5f5f5;
+        --handora-admin-card-bg: #ffffff;
+        --handora-admin-border: #d8dce2;
+        --handora-admin-border-focus: #8B3028;
+        --handora-admin-text: #1a1a2e;
+        --handora-admin-text-secondary: #6b7280;
+        --handora-admin-shadow: 0 1px 3px rgba(0, 0, 0, 0.08),
+                                0 1px 2px rgba(0, 0, 0, 0.06);
+        --handora-admin-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.1);
+        --handora-admin-radius: 8px;
+        --handora-admin-radius-lg: 12px;
+    }
+
+    .handora-admin-wrapper {
+        background: var(--handora-admin-bg);
+        padding: 24px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .handora-admin-wrapper .handora-admin-back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--handora-admin-primary);
+        text-decoration: none;
+        padding: 8px 16px;
+        background: var(--handora-admin-card-bg);
+        border: 1px solid var(--handora-admin-border);
+        border-radius: var(--handora-admin-radius);
+        margin-bottom: 20px;
+        transition: all 0.2s ease;
+    }
+
+    .handora-admin-wrapper .handora-admin-back-link:hover {
+        background: #fef2f2;
+        border-color: var(--handora-admin-primary);
+    }
+
+    .handora-admin-wrapper .handora-admin-card {
+        background: var(--handora-admin-card-bg);
+        border-radius: var(--handora-admin-radius-lg);
+        box-shadow: var(--handora-admin-shadow);
+        border: 1px solid var(--handora-admin-border);
+        padding: 32px 36px;
+    }
+
+    .handora-admin-wrapper .handora-admin-card-header {
+        margin-bottom: 28px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--handora-admin-border);
+    }
+
+    .handora-admin-wrapper .handora-admin-card-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--handora-admin-text);
+        margin: 0;
+    }
+
+    .handora-admin-wrapper .handora-admin-card-subtitle {
+        font-size: 0.875rem;
+        color: var(--handora-admin-text-secondary);
+        margin-top: 4px;
+    }
+
+    .handora-admin-wrapper .handora-admin-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px 24px;
+    }
+
+    .handora-admin-wrapper .handora-admin-field-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .handora-admin-wrapper .handora-admin-field-group-full {
+        grid-column: 1 / -1;
+    }
+
+    .handora-admin-wrapper .handora-admin-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--handora-admin-text);
+        margin-bottom: 8px;
+    }
+
+    .handora-admin-wrapper .handora-admin-label .handora-admin-required {
+        color: var(--handora-admin-primary);
+        margin-left: 2px;
+    }
+
+    .handora-admin-wrapper .handora-admin-input,
+    .handora-admin-wrapper .handora-admin-select,
+    .handora-admin-wrapper .handora-admin-textarea {
+        width: 100%;
+        height: 46px;
+        padding: 12px 16px;
+        border: 1px solid var(--handora-admin-border);
+        border-radius: var(--handora-admin-radius);
+        font-size: 0.9375rem;
+        color: var(--handora-admin-text);
+        background: var(--handora-admin-card-bg);
+        font-family: inherit;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        box-sizing: border-box;
+    }
+
+    .handora-admin-wrapper .handora-admin-textarea {
+        height: auto;
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .handora-admin-wrapper .handora-admin-input:focus,
+    .handora-admin-wrapper .handora-admin-select:focus,
+    .handora-admin-wrapper .handora-admin-textarea:focus {
+        outline: none;
+        border-color: var(--handora-admin-border-focus);
+        box-shadow: 0 0 0 3px rgba(139, 48, 40, 0.1);
+    }
+
+    .handora-admin-wrapper .handora-admin-input::placeholder,
+    .handora-admin-wrapper .handora-admin-textarea::placeholder {
+        color: #9ca3af;
+    }
+
+    .handora-admin-wrapper .handora-admin-select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        padding-right: 40px;
+    }
+
+    .handora-admin-wrapper .handora-admin-checkbox-group {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+    }
+
+    .handora-admin-wrapper .handora-admin-checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        user-select: none;
+        font-size: 0.9375rem;
+        font-weight: 500;
+        color: var(--handora-admin-text);
+    }
+
+    .handora-admin-wrapper .handora-admin-checkbox {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--handora-admin-border);
+        border-radius: 4px;
+        cursor: pointer;
+        accent-color: var(--handora-admin-primary);
+        transition: all 0.2s ease;
+    }
+
+    .handora-admin-wrapper .handora-admin-checkbox:checked {
+        border-color: var(--handora-admin-primary);
+    }
+
+    .handora-admin-wrapper .handora-admin-error {
+        color: #dc2626;
+        font-size: 0.8125rem;
+        margin-top: 6px;
+        font-weight: 500;
+    }
+
+    .handora-admin-wrapper .handora-admin-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid var(--handora-admin-border);
+    }
+
+    .handora-admin-wrapper .handora-admin-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 28px;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        border-radius: var(--handora-admin-radius);
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+
+    .handora-admin-wrapper .handora-admin-btn-primary {
+        background: var(--handora-admin-primary);
+        color: #ffffff;
+        box-shadow: 0 2px 4px rgba(139, 48, 40, 0.2);
+    }
+
+    .handora-admin-wrapper .handora-admin-btn-primary:hover {
+        background: var(--handora-admin-primary-hover);
+        box-shadow: 0 4px 8px rgba(139, 48, 40, 0.3);
+        transform: translateY(-1px);
+    }
+
+    .handora-admin-wrapper .handora-admin-btn-outline {
+        background: var(--handora-admin-card-bg);
+        color: var(--handora-admin-primary);
+        border: 1px solid var(--handora-admin-border);
+    }
+
+    .handora-admin-wrapper .handora-admin-btn-outline:hover {
+        background: #fef2f2;
+        border-color: var(--handora-admin-primary);
+    }
+
+
+    /* =========================================================
+       PASSWORD SHOW / HIDE
+       ========================================================= */
+
+   /* Password show / hide button */
+.handora-password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.handora-password-wrapper .handora-admin-input {
+    padding-right: 58px;
+}
+
+.handora-password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ffffff;
+    border: 2px solid #1a1a1a;
+    border-radius: 5px;
+
+    cursor: pointer;
+    padding: 0;
+
+    color: #8B6658;
+    transition: all 0.2s ease;
+}
+
+.handora-password-toggle:hover {
+    background: #fdf7f5;
+    border-color: #8B3028;
+}
+
+.handora-password-toggle svg {
+    width: 21px;
+    height: 21px;
+    stroke: currentColor;
+}
+
+</style>
+{% endblock %}
+
+
+{% block page_title %}{{ action }} User{% endblock %}
+
+
+{% block content %}
+
+<div class="handora-admin-wrapper">
+
+    <a href="{% url 'admin_users' %}" class="handora-admin-back-link">
+        &larr; Back to Users
+    </a>
+
+    <div class="handora-admin-card">
+
+        <div class="handora-admin-card-header">
+
+            <h2 class="handora-admin-card-title">
+                {{ action }} User
+            </h2>
+
+            <p class="handora-admin-card-subtitle">
+                {% if action == 'Add' %}
+                    Create a new user account
+                {% else %}
+                    Update user information
+                {% endif %}
+            </p>
+
+        </div>
+
+
+        <form method="post" class="handora-admin-form">
+
+            {% csrf_token %}
+
+            <div class="handora-admin-grid">
+
+                <!-- USERNAME -->
+                <div class="handora-admin-field-group">
+
+                    <label
+                        for="{{ form.username.id_for_label }}"
+                        class="handora-admin-label"
+                    >
+                        Username
+                        <span class="handora-admin-required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        name="{{ form.username.html_name }}"
+                        id="{{ form.username.id_for_label }}"
+                        class="handora-admin-input"
+                        value="{{ form.username.value|default_if_none:'' }}"
+                        placeholder="Enter username"
+                    >
+
+                    {% if form.username.errors %}
+                        <span class="handora-admin-error">
+                            {{ form.username.errors }}
+                        </span>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- EMAIL -->
+                <div class="handora-admin-field-group">
+
+                    <label
+                        for="{{ form.email.id_for_label }}"
+                        class="handora-admin-label"
+                    >
+                        Email
+                        <span class="handora-admin-required">*</span>
+                    </label>
+
+                    <input
+                        type="email"
+                        name="{{ form.email.html_name }}"
+                        id="{{ form.email.id_for_label }}"
+                        class="handora-admin-input"
+                        value="{{ form.email.value|default_if_none:'' }}"
+                        placeholder="Enter email address"
+                    >
+
+                    {% if form.email.errors %}
+                        <span class="handora-admin-error">
+                            {{ form.email.errors }}
+                        </span>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- FIRST NAME -->
+                <div class="handora-admin-field-group">
+
+                    <label
+                        for="{{ form.first_name.id_for_label }}"
+                        class="handora-admin-label"
+                    >
+                        First Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="{{ form.first_name.html_name }}"
+                        id="{{ form.first_name.id_for_label }}"
+                        class="handora-admin-input"
+                        value="{{ form.first_name.value|default_if_none:'' }}"
+                        placeholder="Enter first name"
+                    >
+
+                    {% if form.first_name.errors %}
+                        <span class="handora-admin-error">
+                            {{ form.first_name.errors }}
+                        </span>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- LAST NAME -->
+                <div class="handora-admin-field-group">
+
+                    <label
+                        for="{{ form.last_name.id_for_label }}"
+                        class="handora-admin-label"
+                    >
+                        Last Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="{{ form.last_name.html_name }}"
+                        id="{{ form.last_name.id_for_label }}"
+                        class="handora-admin-input"
+                        value="{{ form.last_name.value|default_if_none:'' }}"
+                        placeholder="Enter last name"
+                    >
+
+                    {% if form.last_name.errors %}
+                        <span class="handora-admin-error">
+                            {{ form.last_name.errors }}
+                        </span>
+                    {% endif %}
+
+                </div>
+
+                <!-- PHONE NUMBER -->
+                <div class="handora-admin-field-group">
+
+                    <label
+                        for="{{ form.phone.id_for_label }}"
+                        class="handora-admin-label"
+                    >
+                        Phone Number
+                        <span class="handora-admin-required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        name="{{ form.phone.html_name }}"
+                        id="{{ form.phone.id_for_label }}"
+                        class="handora-admin-input"
+                        value="{{ form.phone.value|default_if_none:'' }}"
+                        placeholder="Enter phone number"
+                        maxlength="15"
+                    >
+
+                    {% if form.phone.errors %}
+                        <span class="handora-admin-error">
+                            {{ form.phone.errors }}
+                        </span>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- PASSWORDS - ONLY WHEN ADDING USER -->
+                {% if action == 'Add' %}
+
+                <!-- PASSWORD -->
+                <div class="handora-admin-field-group">
+
+                    <label
+                        for="{{ form.password1.id_for_label }}"
+                        class="handora-admin-label"
+                    >
+                        Password
+                        <span class="handora-admin-required">*</span>
+                    </label>
+
+                    <div class="handora-password-wrapper">
+
+                        <input
+                            type="password"
+                            name="{{ form.password1.html_name }}"
+                            id="{{ form.password1.id_for_label }}"
+                            class="handora-admin-input"
+                            placeholder="Enter password"
+                            autocomplete="new-password"
+                        >
+
+                        <button
+                            type="button"
+                            class="handora-password-toggle"
+                            onclick="togglePassword('{{ form.password1.id_for_label }}', this)"
+                            aria-label="Show password"
+                            title="Show password"
+                        >
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M2 12C2 12 5.5 5 12 5C18.5 5 22 12 22 12C22 12 18.5 19 12 19C5.5 19 2 12 2 12Z"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="3"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                />
+                            </svg>
+                        </button>
+
+                    </div>
+
+                    {% if form.password1.errors %}
+                        <span class="handora-admin-error">
+                            {{ form.password1.errors }}
+                        </span>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- CONFIRM PASSWORD -->
+                <div class="handora-admin-field-group">
+
+                    <label
+                        for="{{ form.password2.id_for_label }}"
+                        class="handora-admin-label"
+                    >
+                        Confirm Password
+                        <span class="handora-admin-required">*</span>
+                    </label>
+
+                    <div class="handora-password-wrapper">
+
+                        <input
+                            type="password"
+                            name="{{ form.password2.html_name }}"
+                            id="{{ form.password2.id_for_label }}"
+                            class="handora-admin-input"
+                            placeholder="Confirm password"
+                            autocomplete="new-password"
+                        >
+
+                        <button
+                            type="button"
+                            class="handora-password-toggle"
+                            onclick="togglePassword('{{ form.password2.id_for_label }}', this)"
+                            aria-label="Show password"
+                            title="Show password"
+                        >
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M2 12C2 12 5.5 5 12 5C18.5 5 22 12 22 12C22 12 18.5 19 12 19C5.5 19 2 12 2 12Z"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="3"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- REALTIME PASSWORD MATCH MESSAGE -->
+                    <span
+                        id="password-match-message"
+                        class="handora-password-match"
+                    ></span>
+
+                    {% if form.password2.errors %}
+                        <span class="handora-admin-error">
+                            {{ form.password2.errors }}
+                        </span>
+                    {% endif %}
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- PERMISSIONS -->
+                <div class="handora-admin-field-group">
+
+                    <label class="handora-admin-label">
+                        Permissions
+                    </label>
+
+                    <div class="handora-admin-checkbox-group">
+
+                        <label class="handora-admin-checkbox-label">
+
+                            <input
+                                type="checkbox"
+                                name="{{ form.is_staff.html_name }}"
+                                id="{{ form.is_staff.id_for_label }}"
+                                class="handora-admin-checkbox"
+                                {% if form.is_staff.value %}checked{% endif %}
+                            >
+
+                            Staff Status
+
+                        </label>
+
+
+                        <label class="handora-admin-checkbox-label">
+
+                            <input
+                                type="checkbox"
+                                name="{{ form.is_superuser.html_name }}"
+                                id="{{ form.is_superuser.id_for_label }}"
+                                class="handora-admin-checkbox"
+                                {% if form.is_superuser.value %}checked{% endif %}
+                            >
+
+                            Superuser Status
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTION BUTTONS -->
+            <div class="handora-admin-actions">
+
+                <button
+                    type="submit"
+                    class="handora-admin-btn handora-admin-btn-primary"
+                >
+                    Save Changes
+                </button>
+
+                <a
+                    href="{% url 'admin_users' %}"
+                    class="handora-admin-btn handora-admin-btn-outline"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     PASSWORD SHOW / HIDE + MATCH JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+function togglePassword(fieldId, button) {
+    const field = document.getElementById(fieldId);
+
+    if (!field) {
+        return;
+    }
+
+    if (field.type === "password") {
+        field.type = "text";
+
+        button.innerHTML = `
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path
+                    d="M3 3L21 21"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                />
+                <path
+                    d="M10.6 5.2C11.05 5.07 11.52 5 12 5C18.5 5 22 12 22 12C22 12 20.7 14.6 18.2 16.6"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                />
+                <path
+                    d="M6.1 7.1C3.4 9.2 2 12 2 12C2 12 5.5 19 12 19C13.7 19 15.2 18.6 16.5 18"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                />
+                <path
+                    d="M9.9 9.9C9.4 10.45 9.1 11.2 9.1 12C9.1 13.6 10.4 14.9 12 14.9C12.8 14.9 13.55 14.6 14.1 14.1"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                />
+            </svg>
+        `;
+
+        button.setAttribute("aria-label", "Hide password");
+        button.setAttribute("title", "Hide password");
+
+    } else {
+        field.type = "password";
+
+        button.innerHTML = `
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path
+                    d="M2 12C2 12 5.5 5 12 5C18.5 5 22 12 22 12C22 12 18.5 19 12 19C5.5 19 2 12 2 12Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                />
+                <circle
+                    cx="12"
+                    cy="12"
+                    r="3"
+                    stroke="currentColor"
+                    stroke-width="2"
+                />
+            </svg>
+        `;
+
+        button.setAttribute("aria-label", "Show password");
+        button.setAttribute("title", "Show password");
+    }
+}
+
+</script>
+
+{% endblock %}

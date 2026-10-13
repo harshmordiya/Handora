@@ -1,0 +1,936 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Choose Payment Method - Handora{% endblock %}
+
+{% block extra_css %}
+<style>
+    .payment-page {
+        background: #f7f7f7;
+        min-height: calc(100vh - 140px);
+        padding: 40px 20px;
+    }
+
+    .payment-page-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .payment-bill-total {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .bill-total-label {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #777;
+        letter-spacing: 0.5px;
+    }
+
+    .bill-total-amount {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #7B2D26;
+        margin-top: 6px;
+    }
+
+    .checkout-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(320px, 0.8fr);
+        gap: 30px;
+    }
+
+    @media (max-width: 768px) {
+        .checkout-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .payment-sidebar {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .payment-section-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #999;
+        margin-bottom: 12px;
+        padding-left: 4px;
+    }
+
+    .payment-option-card {
+        width: 100%;
+        background: #fff;
+        border: 1px solid #e5e5e5;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        font-family: inherit;
+    }
+
+    .payment-option-card:hover {
+        border-color: #7b2d26;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .payment-card-icon {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .payment-card-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .payment-option-info {
+        flex: 1;
+        text-align: left;
+    }
+
+    .payment-option-name {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #222;
+        margin-bottom: 2px;
+    }
+
+    .payment-option-desc {
+        font-size: 0.8rem;
+        color: #777;
+        line-height: 1.4;
+    }
+
+    .payment-option-arrow {
+        flex-shrink: 0;
+        font-size: 1.3rem;
+        color: #999;
+    }
+
+    .payment-failed-alert {
+        background: #fff5f5;
+        border: 1px solid #feb1b1;
+        border-radius: 12px;
+        padding: 12px 16px;
+        margin-bottom: 16px;
+    }
+
+    .payment-failed-text {
+        color: #c53030;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .payment-actions {
+        margin-top: 20px;
+    }
+
+    .payment-actions .btn-primary {
+        width: 100%;
+        padding: 14px;
+        font-size: 1rem;
+        border-radius: 12px;
+    }
+
+    .checkout-summary {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        border: 1px solid #e5e5e5;
+    }
+
+    h2 {
+        font-size: 1.1rem;
+        color: #222;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .order-items {
+        margin-bottom: 16px;
+    }
+
+    .order-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .order-item-img {
+        flex-shrink: 0;
+    }
+
+    .order-item-img img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 6px;
+    }
+
+    .order-item-info {
+        flex: 1;
+    }
+
+    .order-item-name {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #222;
+        margin-bottom: 2px;
+    }
+
+    .order-item-qty {
+        display: block;
+        font-size: 0.8rem;
+        color: #777;
+    }
+
+    .order-item-price {
+        font-weight: 600;
+        color: #222;
+    }
+
+    .order-total {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        font-size: 0.95rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .order-grand-total {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 12px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        border-top: 2px solid #7B2D26;
+        margin-top: 12px;
+    }
+
+    .placeholder-image-small {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #c65d3b, #e8956a);
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: 700;
+        border-radius: 6px;
+    }
+
+    button {
+        font-family: inherit;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="payment-page">
+
+    <div class="payment-page-inner">
+
+        <!-- TOTAL -->
+        <div class="payment-bill-total">
+
+            <span class="bill-total-label">
+                Bill total
+            </span>
+
+            <div class="bill-total-amount">
+                Rs.{{ total|floatformat:2 }}
+            </div>
+
+        </div>
+
+
+        <div class="checkout-layout">
+
+            <!-- ========================================= -->
+            <!-- LEFT SIDE -->
+            <!-- ========================================= -->
+
+            <div class="payment-sidebar">
+
+
+                {% if not order %}
+
+                <!-- ========================================= -->
+                <!-- PAYMENT METHOD SELECTION -->
+                <!-- ========================================= -->
+
+                <form method="POST" id="payment-method-form">
+
+                    {% csrf_token %}
+
+
+                    <!-- Error / Messages -->
+
+                    {% if messages %}
+
+                        {% for message in messages %}
+
+                            <div class="payment-failed-alert">
+
+                                <p class="payment-failed-text">
+                                    {{ message }}
+                                </p>
+
+                            </div>
+
+                        {% endfor %}
+
+                    {% endif %}
+
+
+                    <div class="payment-section-label">
+                        Choose Payment Method
+                    </div>
+
+
+                    <!-- ========================================= -->
+                    <!-- CASH ON DELIVERY -->
+                    <!-- ========================================= -->
+
+                    <button
+                        type="submit"
+                        name="payment_method"
+                        value="COD"
+                        class="payment-option-card"
+                    >
+
+                        <span class="payment-card-icon">
+
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="#7B2D26"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+
+                                <rect
+                                    x="2"
+                                    y="4"
+                                    width="20"
+                                    height="16"
+                                    rx="3"
+                                    ry="3"
+                                ></rect>
+
+                                <path d="M12 2v4"></path>
+                                <path d="M12 18v4"></path>
+                                <path d="M4 12h4"></path>
+                                <path d="M16 12h4"></path>
+
+                            </svg>
+
+                        </span>
+
+
+                        <span class="payment-option-info">
+
+                            <div class="payment-option-name">
+                                Cash on Delivery
+                            </div>
+
+                            <div class="payment-option-desc">
+                                Pay when your order is delivered.
+                            </div>
+
+                        </span>
+
+
+                        <span class="payment-option-arrow">
+                            &gt;
+                        </span>
+
+                    </button>
+
+
+
+                    <!-- ========================================= -->
+                    <!-- RAZORPAY -->
+                    <!-- ========================================= -->
+
+                    <button
+                        type="submit"
+                        name="payment_method"
+                        value="RAZORPAY"
+                        class="payment-option-card"
+                        id="razorpay-select-button"
+                    >
+
+                        <span class="payment-card-icon">
+
+                            <span
+                                style="
+                                    font-size: 1.5rem;
+                                    font-weight: 700;
+                                    color: #7B2D26;
+                                "
+                            >
+                                O
+                            </span>
+
+                        </span>
+
+
+                        <span class="payment-option-info">
+
+                            <div class="payment-option-name">
+                                Online payment
+                            </div>
+
+                            <div class="payment-option-desc">
+                                Pay securely via UPI, Card, Net Banking &amp; Wallet
+                            </div>
+
+                        </span>
+
+
+                        <span class="payment-option-arrow">
+                            &gt;
+                        </span>
+
+                    </button>
+
+                </form>
+
+
+                {% else %}
+
+                <!-- ========================================= -->
+                <!-- RAZORPAY PAYMENT STATE -->
+                <!-- ========================================= -->
+
+
+                <!--
+                    IMPORTANT:
+                    This form is hidden.
+                    Razorpay success will submit this form
+                    to payment_callback.
+                -->
+
+                <form
+                    method="POST"
+                    action="{% url 'payment_callback' %}"
+                    id="razorpay-form"
+                    style="display: none;"
+                >
+
+                    {% csrf_token %}
+
+                    <input
+                        type="hidden"
+                        name="order_id"
+                        value="{{ order.id }}"
+                    >
+
+                    <input
+                        type="hidden"
+                        name="razorpay_payment_id"
+                        id="razorpay_payment_id_input"
+                    >
+
+                    <input
+                        type="hidden"
+                        name="razorpay_order_id"
+                        id="razorpay_order_id_input"
+                        value="{{ order.razorpay_order_id }}"
+                    >
+
+                    <input
+                        type="hidden"
+                        name="razorpay_signature"
+                        id="razorpay_signature_input"
+                    >
+
+                </form>
+
+
+                <div class="payment-section-label">
+                    Razorpay Payment
+                </div>
+
+
+                <p
+                    class="payment-option-desc"
+                    style="margin-bottom: 20px;"
+                >
+                    Secure payment powered by Razorpay.
+                </p>
+
+
+                <!--
+                    Backup button.
+                    Normally Razorpay will automatically open.
+                -->
+
+                <div class="payment-actions">
+
+                    <button
+                        type="button"
+                        id="razorpay-checkout-btn"
+                        class="btn-primary"
+                    >
+                        Pay Rs.{{ total|floatformat:2 }} with Razorpay
+                    </button>
+
+                </div>
+
+
+                <!-- ========================================= -->
+                <!-- RAZORPAY CHECKOUT JS -->
+                <!-- ========================================= -->
+
+                <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+                <script>
+
+                    document.addEventListener(
+                        "DOMContentLoaded",
+                        function () {
+
+                            /*
+                             * Razorpay order ID must exist.
+                             */
+
+                            const razorpayOrderId =
+                                "{{ razorpay_order_id|default:'' }}";
+
+                            const razorpayKey =
+                                "{{ razorpay_key|default:'' }}";
+
+
+                            /*
+                             * If order ID or key is missing,
+                             * show useful error instead of silently failing.
+                             */
+
+                            if (!razorpayOrderId || !razorpayKey) {
+
+                                console.error(
+                                    "Razorpay initialization failed:",
+                                    {
+                                        razorpayOrderId:
+                                            razorpayOrderId,
+
+                                        razorpayKey:
+                                            razorpayKey
+                                    }
+                                );
+
+                                return;
+
+                            }
+
+
+                            /*
+                             * Razorpay Checkout options
+                             */
+
+                            const options = {
+
+                                key: razorpayKey,
+
+                                amount: {{ razorpay_amount|default:0 }},
+
+                                currency: "INR",
+
+                                name: "Handora",
+
+                                description:
+                                    "Order #{{ order.id }}",
+
+                                order_id:
+                                    razorpayOrderId,
+
+
+                                /*
+                                 * Customer information
+                                 */
+
+                                prefill: {
+
+                                    name:
+                                        "{{ order.full_name|escapejs }}",
+
+                                    contact:
+                                        "{{ order.phone|escapejs }}",
+
+                                    email:
+                                        "{{ order.email|escapejs }}"
+
+                                },
+
+
+                                /*
+                                 * =====================================
+                                 * PAYMENT METHOD CONFIGURATION
+                                 * =====================================
+                                 *
+                                 * Show:
+                                 *
+                                 * UPI
+                                 * Card
+                                 * Netbanking
+                                 * Wallet
+                                 *
+                                 * Hide:
+                                 *
+                                 * Pay Later
+                                 *
+                                 */
+
+                                config: {
+
+                                    display: {
+
+                                        sequence: [
+                                            "upi",
+                                            "card",
+                                            "netbanking",
+                                            "wallet"
+                                        ],
+
+                                        hide: [
+
+                                            {
+                                                method: "paylater"
+                                            }
+
+                                        ],
+
+                                        preferences: {
+
+                                            /*
+                                             * Keep Razorpay's normal
+                                             * payment-method availability.
+                                             */
+
+                                            show_default_blocks: true
+
+                                        }
+
+                                    }
+
+                                },
+
+
+                                /*
+                                 * =====================================
+                                 * PAYMENT SUCCESS
+                                 * =====================================
+                                 */
+
+                                handler: function (response) {
+
+                                    console.log(
+                                        "Razorpay payment successful",
+                                        response
+                                    );
+
+
+                                    /*
+                                     * Save Razorpay response
+                                     */
+
+                                    document
+                                        .getElementById(
+                                            "razorpay_payment_id_input"
+                                        )
+                                        .value =
+                                        response
+                                            .razorpay_payment_id;
+
+
+                                    document
+                                        .getElementById(
+                                            "razorpay_order_id_input"
+                                        )
+                                        .value =
+                                        response
+                                            .razorpay_order_id;
+
+
+                                    document
+                                        .getElementById(
+                                            "razorpay_signature_input"
+                                        )
+                                        .value =
+                                        response
+                                            .razorpay_signature;
+
+
+                                    /*
+                                     * Submit to Django.
+                                     *
+                                     * Django will verify the payment
+                                     * before showing Order Success.
+                                     */
+
+                                    document
+                                        .getElementById(
+                                            "razorpay-form"
+                                        )
+                                        .submit();
+
+                                },
+
+
+                                /*
+                                 * =====================================
+                                 * PAYMENT MODAL
+                                 * =====================================
+                                 */
+
+                                modal: {
+
+                                    ondismiss: function () {
+
+                                        console.log(
+                                            "Razorpay checkout closed."
+                                        );
+
+                                    }
+
+                                },
+
+
+                                /*
+                                 * =====================================
+                                 * THEME
+                                 * =====================================
+                                 */
+
+                                theme: {
+
+                                    color: "#7B2D26"
+
+                                }
+
+                            };
+
+
+                            /*
+                             * Create Razorpay object
+                             */
+
+                            const razorpay =
+                                new Razorpay(options);
+
+
+                            /*
+                             * Handle payment errors
+                             */
+
+                            razorpay.on(
+                                "payment.failed",
+                                function (response) {
+
+                                    console.error(
+                                        "Razorpay payment failed:",
+                                        response
+                                    );
+
+                                    alert(
+                                        "Payment failed. Please try again."
+                                    );
+
+                                }
+                            );
+
+
+                            /*
+                             * =====================================
+                             * OPEN RAZORPAY AUTOMATICALLY
+                             * =====================================
+                             *
+                             * This is the important change.
+                             *
+                             * After Django creates the Razorpay
+                             * order, this page loads and immediately
+                             * opens the official Razorpay Checkout.
+                             *
+                             */
+
+                            setTimeout(
+                                function () {
+
+                                    razorpay.open();
+
+                                },
+                                300
+                            );
+
+
+                            /*
+                             * Backup button
+                             */
+
+                            document
+                                .getElementById(
+                                    "razorpay-checkout-btn"
+                                )
+                                .addEventListener(
+                                    "click",
+                                    function () {
+
+                                        razorpay.open();
+
+                                    }
+                                );
+
+                        }
+                    );
+
+                </script>
+
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- ========================================= -->
+            <!-- RIGHT SIDE: ORDER SUMMARY -->
+            <!-- ========================================= -->
+
+            <div class="checkout-summary">
+
+                <h2>
+                    Your Items
+                </h2>
+
+
+                <div class="order-items">
+
+                    {% for item in cart_items %}
+
+                    <div class="order-item">
+
+                        <div class="order-item-img">
+
+                            {% if item.product.image %}
+
+                                <img
+                                    src="{{ item.product.image.url }}"
+                                    alt="{{ item.product.name }}"
+                                >
+
+                            {% else %}
+
+                                <div class="placeholder-image-small">
+
+                                    <span>
+                                        {{ item.product.name|first }}
+                                    </span>
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="order-item-info">
+
+                            <span class="order-item-name">
+
+                                {{ item.product.name|truncatechars:30 }}
+
+                            </span>
+
+                            <span class="order-item-qty">
+
+                                Qty: {{ item.quantity }}
+
+                            </span>
+
+                        </div>
+
+
+                        <span class="order-item-price">
+
+                            Rs.{{ item.total|floatformat:2 }}
+
+                        </span>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <div class="order-total">
+
+                    <span>
+                        Subtotal:
+                    </span>
+
+                    <span>
+                        Rs.{{ total|floatformat:2 }}
+                    </span>
+
+                </div>
+
+
+                <div class="order-total">
+
+                    <span>
+                        Shipping:
+                    </span>
+
+                    <span>
+                        Free
+                    </span>
+
+                </div>
+
+
+                <div class="order-grand-total">
+
+                    <span>
+                        Total:
+                    </span>
+
+                    <strong>
+                        Rs.{{ total|floatformat:2 }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

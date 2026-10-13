@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Handora - Order Confirmation</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+
+        .header {
+            background-color: #7B2D26;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        .content {
+            padding: 30px 20px;
+        }
+
+        .content h2 {
+            color: #7B2D26;
+            margin-top: 0;
+            font-size: 24px;
+        }
+
+        .content h3 {
+            color: #7B2D26;
+            margin-top: 25px;
+        }
+
+        .content p {
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .order-details {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+
+        .order-details h3 {
+            color: #7B2D26;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 9px 0;
+            border-bottom: 1px solid #eeeeee;
+            font-size: 14px;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .items-table th,
+        .items-table td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid #eeeeee;
+            font-size: 14px;
+        }
+
+        .items-table th {
+            background-color: #7B2D26;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .items-table .total-row td {
+            font-weight: 700;
+            font-size: 16px;
+            color: #7B2D26;
+            border-bottom: none;
+            padding-top: 16px;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #7B2D26;
+            color: #ffffff !important;
+            padding: 14px 30px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .note {
+            background-color: #fff8f6;
+            border-left: 4px solid #7B2D26;
+            padding: 12px 15px;
+            margin: 25px 0;
+        }
+
+        .footer {
+            background-color: #f9f9f9;
+            padding: 20px;
+            text-align: center;
+            color: #888888;
+            font-size: 13px;
+        }
+
+        @media only screen and (max-width: 600px) {
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            .detail-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .items-table th,
+            .items-table td {
+                padding: 9px 5px;
+                font-size: 13px;
+            }
+
+            .btn {
+                display: block;
+                padding: 13px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <div class="header">
+        <h1>HANDORA</h1>
+    </div>
+
+
+    <!-- Main Content -->
+    <div class="content">
+
+        <h2>Order Confirmation</h2>
+
+        <p>
+            Dear {{ customer_name }},
+        </p>
+
+        <p>
+            Thank you for shopping with Handora.
+            Your order has been successfully placed and confirmed.
+        </p>
+
+
+        <!-- Order Information -->
+        <div class="order-details">
+
+            <h3>Order Summary</h3>
+
+            <div class="detail-row">
+                <span>Order ID:</span>
+                <span>
+                    <strong>#{{ order.id }}</strong>
+                </span>
+            </div>
+
+            <div class="detail-row">
+                <span>Order Date:</span>
+                <span>
+                    {{ order.created_at|date:"F d, Y" }}
+                </span>
+            </div>
+
+            <div class="detail-row">
+                <span>Payment Status:</span>
+                <span>
+                    {{ order.payment_status }}
+                </span>
+            </div>
+
+            <div class="detail-row">
+                <span>Payment Method:</span>
+                <span>
+                    {{ order.payment_method }}
+                </span>
+            </div>
+
+        </div>
+
+
+        <!-- Purchased Products -->
+        <h3>Items Ordered</h3>
+
+        <table class="items-table">
+
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for item in items %}
+
+                <tr>
+
+                    <td>
+                        {{ item.product.name }}
+                    </td>
+
+                    <td>
+                        {{ item.quantity }}
+                    </td>
+
+                    <td>
+                        ₹{{ item.price|floatformat:2 }}
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="3">
+                        No items found for this order.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+            <tfoot>
+
+                <tr class="total-row">
+
+                    <td colspan="2">
+                        Total Amount
+                    </td>
+
+                    <td>
+                        ₹{{ order.total_amount|floatformat:2 }}
+                    </td>
+
+                </tr>
+
+            </tfoot>
+
+        </table>
+
+
+        <!-- Receipt -->
+        <div class="cta-section">
+
+            <a
+                href="{{ receipt_url }}"
+                class="btn"
+            >
+                View / Download Receipt
+            </a>
+
+        </div>
+
+
+        <!-- Important Note -->
+        <div class="note">
+
+            <p style="margin: 0;">
+                Your receipt contains the complete details of your order.
+                You can view or download it using the button above.
+            </p>
+
+        </div>
+
+
+        <p>
+            If you have any questions regarding your order,
+            please contact us.
+        </p>
+
+        <p>
+            Thank you for choosing Handora!
+        </p>
+
+        <p>
+            Warm regards,<br>
+            <strong>The Handora Team</strong>
+        </p>
+
+    </div>
+
+
+    <!-- Footer -->
+    <div class="footer">
+
+        <p>
+            Handora - Handcrafted with Love
+        </p>
+
+        <p>
+            This is an automated order confirmation email.
+            Please do not reply directly to this email.
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,355 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Net Banking - Handora{% endblock %}
+
+{% block extra_css %}
+<style>
+    .payment-page {
+        background: #f7f7f7;
+        min-height: calc(100vh - 140px);
+        padding: 40px 20px;
+    }
+
+    .payment-page-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .payment-bill-total {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .bill-total-label {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #777;
+        letter-spacing: 0.5px;
+    }
+
+    .bill-total-amount {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #7B2D26;
+        margin-top: 6px;
+    }
+
+    .checkout-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(320px, 0.8fr);
+        gap: 30px;
+    }
+
+    @media (max-width: 768px) {
+        .checkout-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .payment-sidebar {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .payment-section-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #999;
+        margin-bottom: 12px;
+        padding-left: 4px;
+    }
+
+    .payment-detail-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 24px;
+        border: 1px solid #e5e5e5;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .bank-logo {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        background: linear-gradient(135deg, #7B2D26, #c65d3b);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 2.5rem;
+        font-weight: 700;
+    }
+
+    .bank-name-display {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #222;
+        margin-bottom: 12px;
+    }
+
+    .demo-warning {
+        background: #fff5f5;
+        border: 1px solid #fed7d7;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    .demo-warning-text {
+        color: #c53030;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin: 0 0 8px 0;
+    }
+
+    .demo-warning-subtext {
+        color: #71806a;
+        font-size: 0.85rem;
+        margin: 0;
+    }
+
+    .netbanking-info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+        font-size: 0.95rem;
+    }
+
+    .netbanking-info-row:last-child {
+        border-bottom: none;
+        font-weight: 600;
+    }
+
+    .netbanking-info-label {
+        color: #777;
+    }
+
+    .netbanking-info-value {
+        color: #222;
+    }
+
+    .payment-actions {
+        margin-top: 20px;
+    }
+
+    .payment-actions .btn-primary {
+        width: 100%;
+        padding: 14px;
+        font-size: 1rem;
+        border-radius: 12px;
+    }
+
+    .payment-actions .btn-secondary {
+        display: block;
+        width: 100%;
+        padding: 14px;
+        font-size: 1rem;
+        border-radius: 12px;
+        background: #f8f9fa;
+        color: #7B2D26;
+        border: 2px solid #7B2D26;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer;
+        margin-bottom: 12px;
+    }
+
+    .payment-actions .btn-secondary:hover {
+        background: #f0f0f0;
+    }
+
+    .checkout-summary {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        border: 1px solid #e5e5e5;
+    }
+
+    h2 {
+        font-size: 1.1rem;
+        color: #222;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .order-items {
+        margin-bottom: 16px;
+    }
+
+    .order-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .order-item-img {
+        flex-shrink: 0;
+    }
+
+    .order-item-img img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 6px;
+    }
+
+    .order-item-info {
+        flex: 1;
+    }
+
+    .order-item-name {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #222;
+        margin-bottom: 2px;
+    }
+
+    .order-item-qty {
+        display: block;
+        font-size: 0.8rem;
+        color: #777;
+    }
+
+    .order-item-price {
+        font-weight: 600;
+        color: #222;
+    }
+
+    .order-total {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        font-size: 0.95rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .order-total:last-child {
+        border-bottom: none;
+    }
+
+    .order-grand-total {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 12px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        border-top: 2px solid #7B2D26;
+        margin-top: 12px;
+    }
+
+    .placeholder-image-small {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #c65d3b, #e8956a);
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: 700;
+        border-radius: 6px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="payment-page">
+    <div class="payment-page-inner">
+
+        <div class="payment-bill-total">
+            <span class="bill-total-label">Bill total</span>
+            <div class="bill-total-amount">Rs.{{ order.total_amount|floatformat:2 }}</div>
+        </div>
+
+        <div class="checkout-layout">
+
+            <!-- LEFT SIDE: Demo Net Banking -->
+            <div class="payment-sidebar">
+
+                <div class="payment-section-label">Demo Net Banking</div>
+
+                <div class="demo-warning">
+                    <p class="demo-warning-text">DEMO MODE</p>
+                    <p class="demo-warning-subtext">This is a demo representation of a net banking payment handoff. No real banking credentials are collected. In production, you would be redirected to your bank's official payment gateway.</p>
+                </div>
+
+                <div class="payment-detail-card">
+                    <div class="bank-logo">{{ bank_name|first|upper }}</div>
+                    <div class="bank-name-display">{{ bank_name }}</div>
+
+                    <div class="netbanking-info-row">
+                        <span class="netbanking-info-label">Order ID</span>
+                        <span class="netbanking-info-value">#{{ order.id }}</span>
+                    </div>
+                    <div class="netbanking-info-row">
+                        <span class="netbanking-info-label">Amount</span>
+                        <span class="netbanking-info-value">Rs.{{ order.total_amount|floatformat:2 }}</span>
+                    </div>
+                    <div class="netbanking-info-row">
+                        <span class="netbanking-info-label">Payment Method</span>
+                        <span class="netbanking-info-value">Net Banking ({{ bank_name }})</span>
+                    </div>
+                </div>
+
+                <form method="POST" action="{% url 'netbanking_payment' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="order_id" value="{{ order.id }}">
+
+                    <div class="payment-actions">
+                        <a href="{% url 'payment_method' %}" class="btn-secondary">Cancel</a>
+                        <button type="submit" name="complete_payment" class="btn-primary">Complete Payment</button>
+                    </div>
+                </form>
+
+            </div>
+
+            <!-- RIGHT SIDE: Order Summary -->
+            <div class="checkout-summary">
+                <h2>Your Items</h2>
+                {% for item in order.items.all %}
+                <div class="order-item">
+                    <div class="order-item-img">
+                        {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                        {% else %}
+                        <div class="placeholder-image-small">
+                            <span>{{ item.product.name|first }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="order-item-info">
+                        <span class="order-item-name">{{ item.product.name|truncatechars:30 }}</span>
+                        <span class="order-item-qty">Qty: {{ item.quantity }}</span>
+                    </div>
+                    <span class="order-item-price">Rs.{{ item.subtotal|floatformat:2 }}</span>
+                </div>
+                {% endfor %}
+
+                <div class="order-total">
+                    <span>Subtotal:</span>
+                    <span>Rs.{{ order.total_amount|floatformat:2 }}</span>
+                </div>
+                <div class="order-total">
+                    <span>Shipping:</span>
+                    <span>Free</span>
+                </div>
+                <div class="order-grand-total">
+                    <span>Total:</span>
+                    <strong>Rs.{{ order.total_amount|floatformat:2 }}</strong>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

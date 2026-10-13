@@ -1,0 +1,86 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block title %}Handora Admin - Orders{% endblock %}
+
+{% block page_title %}Manage Orders{% endblock %}
+
+{% block content %}
+<div class="handora-content-wrapper">
+    <form method="get" class="handora-search-form-inline">
+        <div class="handora-form-row handora-form-row-inline">
+            <input type="text" name="search" value="{{ search_query }}" placeholder="Search orders..." class="handora-form-input handora-form-input-sm">
+            <select name="status" class="handora-form-input handora-form-input-sm" style="max-width: 160px;">
+                <option value="">All Statuses</option>
+                {% for value, label in status_choices %}
+                <option value="{{ value }}" {% if status_filter == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="handora-btn handora-btn-sm handora-btn-outline">Filter</button>
+            {% if search_query or status_filter %}
+            <a href="?search=&status=" class="handora-btn handora-btn-sm handora-btn-outline">Clear</a>
+            {% endif %}
+        </div>
+    </form>
+    <div class="handora-table-container">
+        <table class="handora-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Payment</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>#{{ order.id }}</td>
+                    <td>{{ order.full_name }}</td>
+                    <td>{{ order.email|default:"N/A" }}</td>
+                    <td>{{ order.phone }}</td>
+                    <td>₹{{ order.total_amount|floatformat:2 }}</td>
+                    <td><span class="handora-badge handora-badge-{{ order.status|lower }}">{{ order.get_status_display }}</span></td>
+                    <td>{{ order.get_payment_method_display }}</td>
+                    <td>{{ order.created_at|date:"M d, Y" }}</td>
+                    <td class="handora-action-cell">
+                        <a href="{% url 'admin_order_detail' order.id %}" class="handora-btn handora-btn-sm handora-btn-outline">View</a>
+                        <form method="post" action="{% url 'admin_order_delete' order.id %}" onsubmit="return confirm('Are you sure you want to delete this order?');" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="handora-btn handora-btn-sm" style="background-color: #dc3545; color: white; border-color: #dc3545;">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="9" class="handora-text-center">No orders found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if orders.has_other_pages %}
+    <div class="handora-pagination">
+        {% if orders.has_previous %}
+        <a href="?page={{ orders.previous_page_number }}" class="handora-pagination-link">&laquo; Prev</a>
+        {% endif %}
+        {% for page in orders.paginator.page_range %}
+        {% if orders.number == page %}
+        <span class="handora-pagination-link active">{{ page }}</span>
+        {% else %}
+        <a href="?page={{ page }}" class="handora-pagination-link">{{ page }}</a>
+        {% endif %}
+        {% endfor %}
+        {% if orders.has_next %}
+        <a href="?page={{ orders.next_page_number }}" class="handora-pagination-link">Next &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

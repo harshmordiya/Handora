@@ -1,0 +1,66 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block title %}Handora Admin - Categories{% endblock %}
+
+{% block page_title %}Manage Categories{% endblock %}
+
+{% block content %}
+<div class="handora-content-wrapper">
+    <div class="handora-page-actions">
+        <a href="{% url 'admin_category_add' %}" class="handora-btn handora-btn-primary">
+            + Add Category
+        </a>
+    </div>
+
+    <div class="handora-table-container">
+        <table class="handora-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Slug</th>
+                    <th>Products</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categories %}
+                <tr>
+                    <td>{{ category.id }}</td>
+                    <td>{{ category.name }}</td>
+                    <td>{{ category.slug }}</td>
+                    <td>{{ category.products.count }}</td>
+                    <td class="handora-action-cell">
+                        <a href="{% url 'admin_category_edit' category.id %}" class="handora-btn handora-btn-sm handora-btn-outline">Edit</a>
+                        <a href="{% url 'admin_category_delete' category.id %}" class="handora-btn handora-btn-sm handora-btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="handora-text-center">No categories found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if categories.has_other_pages %}
+    <div class="handora-pagination">
+        {% if categories.has_previous %}
+        <a href="?page={{ categories.previous_page_number }}" class="handora-pagination-link">&laquo; Prev</a>
+        {% endif %}
+        {% for page in categories.paginator.page_range %}
+        {% if categories.number == page %}
+        <span class="handora-pagination-link active">{{ page }}</span>
+        {% else %}
+        <a href="?page={{ page }}" class="handora-pagination-link">{{ page }}</a>
+        {% endif %}
+        {% endfor %}
+        {% if categories.has_next %}
+        <a href="?page={{ categories.next_page_number }}" class="handora-pagination-link">Next &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

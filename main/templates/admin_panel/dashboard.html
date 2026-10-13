@@ -1,0 +1,376 @@
+{% extends "admin_panel/base.html" %}
+{% load static admin_extras %}
+
+{% block title %}Handora Admin - Dashboard{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block extra_head %}
+<style>
+.admin-content { padding: 24px 32px; }
+@media (max-width: 768px) { .admin-content { padding: 16px; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard-wrapper">
+
+    <div class="admin-dashboard-header">
+        <h2 class="admin-dashboard-title">Dashboard</h2>
+        <p class="admin-dashboard-subtitle">Handmade e-commerce analytics at a glance.</p>
+    </div>
+
+    <div class="admin-kpi-grid">
+        <div class="admin-kpi-card admin-kpi-users">
+            <div class="admin-kpi-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17 21V19C17 16.7909 15.2091 15 13 15H11C8.79086 15 7 16.7909 7 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="14" cy="9" r="2" stroke="currentColor" stroke-width="2"/>
+                    <circle cx="10" cy="9" r="2" stroke="currentColor" stroke-width="2"/>
+                </svg>
+            </div>
+            <div class="admin-kpi-content">
+                <div class="admin-kpi-value">{{ total_users }}</div>
+                <div class="admin-kpi-label">Total Users</div>
+            </div>
+        </div>
+
+        <div class="admin-kpi-card admin-kpi-orders">
+            <div class="admin-kpi-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.59 14.41L15.27 19.73C14.83 20.17 14.27 21.07 14.27 21.79C14.27 22.51 14.83 23.11 13.11 23.11H8.11C7.16 23.11 6.4 23.5 5.5 23.5H3.5C2.12 23.5 1 22.38 1 21V5C1 3.14 2.46 1.5 4.2 1.5H6.5C7.33 1.5 8.24 1.83 8.83 2.5L10.5 4.17C10.86 4.53 11.13 4.99 11.13 5.5C11.13 6.01 10.87 6.5 10.38 6.87L8.46 8.5C6.9 9.83 6 11.79 6 13.87V16.5C6 17.33 6.87 18 7.89 18H13.89C15.37 18 16.76 17.26 17.5 16.02C17.51 16 17.51 15.99 17.51 15.97C17.53 14.98 17.97 14.1 18.81 13.65C19.85 13.08 21 13.5 21.5 14.49C21.12 14.61 20.86 14.98 20.59 14.41Z" fill="currentColor"/>
+                    <path d="M18 6.5C19.3807 6.5 20.5 5.38071 20.5 4C20.5 2.61929 19.3807 1.5 18 1.5C16.6193 1.5 15.5 2.61929 15.5 4C15.5 5.38071 16.6193 6.5 18 6.5Z" fill="currentColor"/>
+                </svg>
+            </div>
+            <div class="admin-kpi-content">
+                <div class="admin-kpi-value">{{ total_orders }}</div>
+                <div class="admin-kpi-label">Total Orders</div>
+            </div>
+        </div>
+
+        <div class="admin-kpi-card admin-kpi-products">
+            <div class="admin-kpi-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 16V8C21 6.89543 20.1046 6 19 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18H7L10 20H14L17 18H19C20.1046 18 21 17.1046 21 16Z" stroke="currentColor" stroke-width="2"/>
+                    <path d="M8 10C8 8.89543 8.89543 8 10 8H14C15.1046 8 16 8.89543 16 10V14C16 15.1046 15.1046 16 14 16H10C8.89543 16 8 15.1046 8 14V10Z" fill="currentColor"/>
+                </svg>
+            </div>
+            <div class="admin-kpi-content">
+                <div class="admin-kpi-value">{{ total_products }}</div>
+                <div class="admin-kpi-label">Total Products</div>
+            </div>
+        </div>
+
+        <div class="admin-kpi-card admin-kpi-revenue">
+            <div class="admin-kpi-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 1C6.48 1 2 5.48 2 11C2 16.52 6.48 21 12 21C17.52 21 22 16.52 22 11C22 5.48 17.52 1 12 1ZM11 16L6.16 11.16L7.51 9.81L11 13.3L16.49 7.81L17.84 9.16L11 16Z" fill="currentColor"/>
+                </svg>
+            </div>
+            <div class="admin-kpi-content">
+                <div class="admin-kpi-value">₹{{ total_revenue|floatformat:0 }}</div>
+                <div class="admin-kpi-label">Total Revenue</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-chart-grid">
+        <div class="admin-chart-card" style="grid-column: 1 / -1;">
+            <div class="admin-chart-header">
+                <h3 class="admin-chart-title">Revenue Overview</h3>
+            </div>
+            <div class="admin-chart-wrapper admin-chart-wrapper-full">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+
+        <div class="admin-chart-card">
+            <div class="admin-chart-header">
+                <h3 class="admin-chart-title">Order Analytics</h3>
+            </div>
+            <div class="admin-chart-wrapper">
+                <canvas id="orderAnalyticsChart"></canvas>
+            </div>
+        </div>
+
+        <div class="admin-chart-card">
+            <div class="admin-chart-header">
+                <h3 class="admin-chart-title">Sales Summary</h3>
+            </div>
+            <div class="admin-sales-summary-grid">
+                <div class="admin-sales-summary-item">
+                    <div class="admin-sales-summary-label">Total Revenue</div>
+                    <div class="admin-sales-summary-value">₹{{ total_revenue|floatformat:0 }}</div>
+                </div>
+                <div class="admin-sales-summary-item">
+                    <div class="admin-sales-summary-label">Total Orders</div>
+                    <div class="admin-sales-summary-value">{{ total_orders }}</div>
+                </div>
+                <div class="admin-sales-summary-item">
+                    <div class="admin-sales-summary-label">Avg Order Value</div>
+                    <div class="admin-sales-summary-value">₹{{ avg_order_value|floatformat:2 }}</div>
+                </div>
+                <div class="admin-sales-summary-item">
+                    <div class="admin-sales-summary-label">Confirmed</div>
+                    <div class="admin-sales-summary-value">{{ status_map.Confirmed }}</div>
+                </div>
+                <div class="admin-sales-summary-item">
+                    <div class="admin-sales-summary-label">Pending</div>
+                    <div class="admin-sales-summary-value">{{ status_map.Pending }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="admin-chart-card admin-recent-orders">
+            <div class="admin-chart-header">
+                <h3 class="admin-chart-title">Recent Orders</h3>
+                <a href="{% url 'admin_orders' %}" class="admin-chart-view-all">View All</a>
+            </div>
+            <div class="table-responsive">
+                <table class="admin-recent-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Amount</th>
+                            <th>Payment</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in recent_orders %}
+                        <tr>
+                            <td class="order-id">#{{ order.id }}</td>
+                            <td class="order-customer">{{ order.full_name|default:order.user.username }}</td>
+                            <td class="order-amount">₹{{ order.total_amount }}</td>
+                            <td class="order-payment"><span class="payment-badge">{{ order.get_payment_method_display }}</span></td>
+                            <td><span class="status-badge status-{{ order.status|lower }}">{{ order.get_status_display }}</span></td>
+                            <td class="order-date">{{ order.created_at|date:"M d, Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="handora-text-center">No recent orders.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var monthlyLabels = {{ monthly_labels|safe }};
+    var monthlyRevenue = {{ monthly_revenue|safe }};
+    var monthlyOrders = {{ monthly_orders|safe }};
+    var statusLabels = {{ status_labels|safe }};
+    var statusCounts = {{ status_counts|safe }};
+    var categoryNames = {{ category_names|safe }};
+    var categoryCounts = {{ category_product_counts|safe }};
+
+    var P = '#7B2D26';
+    var T = '#B8866B';
+
+    var revenueCtx = document.getElementById('revenueChart').getContext('2d');
+    new Chart(revenueCtx, {
+        type: 'line',
+        data: {
+            labels: monthlyLabels,
+            datasets: [{
+                label: 'Revenue (₹)',
+                data: monthlyRevenue,
+                borderColor: T,
+                backgroundColor: 'rgba(184, 137, 91, 0.12)',
+                borderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                tension: 0.3,
+                fill: true
+            }, {
+                label: 'Orders',
+                data: monthlyOrders,
+                borderColor: P,
+                backgroundColor: 'rgba(123, 45, 38, 0.05)',
+                borderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                tension: 0.3,
+                yAxisID: 'y1'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            scales: {
+                y: {
+                    ticks: { color: '#6B7280', font: { size: 11 } },
+                    grid: { color: 'rgba(123, 45, 38, 0.05)' }
+                },
+                y1: {
+                    position: 'right',
+                    grid: { drawOnChartArea: false },
+                    ticks: { color: '#6B7280', font: { size: 11 } }
+                },
+                x: {
+                    ticks: { color: '#6B7280', font: { size: 11 } },
+                    grid: { display: false }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: { color: '#6B7280', font: { size: 12 }, padding: 16 }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    titleColor: P,
+                    bodyColor: '#333',
+                    borderColor: 'rgba(123, 45, 38, 0.12)',
+                    borderWidth: 1,
+                    padding: 10,
+                    cornerRadius: 6
+                }
+            }
+        }
+    });
+
+    var analyticsCtx = document.getElementById('orderAnalyticsChart').getContext('2d');
+    new Chart(analyticsCtx, {
+        type: 'doughnut',
+        data: {
+            labels: statusLabels,
+            datasets: [{
+                data: statusCounts,
+                backgroundColor: [
+                    'rgba(245, 158, 11, 0.85)',
+                    'rgba(16, 185, 129, 0.85)',
+                    'rgba(59, 130, 246, 0.85)',
+                    'rgba(139, 92, 246, 0.85)',
+                    'rgba(239, 68, 68, 0.85)'
+                ],
+                borderColor: 'rgba(255, 255, 255, 0.5)',
+                borderWidth: 2,
+                hoverOffset: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '55%',
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#6B7280',
+                        font: { size: 12 },
+                        padding: 16,
+                        usePointStyle: true,
+                        pointStyle: 'circle'
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    titleColor: P,
+                    bodyColor: '#333',
+                    borderColor: 'rgba(123, 45, 38, 0.12)',
+                    borderWidth: 1,
+                    padding: 10,
+                    cornerRadius: 6
+                }
+            }
+        }
+    });
+
+    var ordersCtx = document.getElementById('ordersByMonthChart').getContext('2d');
+    new Chart(ordersCtx, {
+        type: 'bar',
+        data: {
+            labels: monthlyLabels,
+            datasets: [{
+                label: 'Orders',
+                data: monthlyOrders,
+                backgroundColor: 'rgba(123, 45, 38, 0.7)',
+                hoverBackgroundColor: P,
+                borderRadius: 4,
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            scales: {
+                y: {
+                    ticks: { color: '#6B7280', font: { size: 11 } },
+                    grid: { color: 'rgba(123, 45, 38, 0.05)' }
+                },
+                x: {
+                    ticks: { color: '#6B7280', font: { size: 11 } },
+                    grid: { display: false }
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    titleColor: P,
+                    bodyColor: '#333',
+                    borderColor: 'rgba(123, 45, 38, 0.12)',
+                    borderWidth: 1,
+                    padding: 10,
+                    cornerRadius: 6
+                }
+            }
+        }
+    });
+
+    var categoryCtx = document.getElementById('categoryChart').getContext('2d');
+    new Chart(categoryCtx, {
+        type: 'bar',
+        data: {
+            labels: categoryNames,
+            datasets: [{
+                label: 'Products',
+                data: categoryCounts,
+                backgroundColor: 'rgba(184, 137, 91, 0.7)',
+                hoverBackgroundColor: T,
+                borderRadius: 4,
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            interaction: { mode: 'index', intersect: false },
+            scales: {
+                x: {
+                    ticks: { color: '#6B7280', font: { size: 11 } },
+                    grid: { color: 'rgba(123, 45, 38, 0.05)' }
+                },
+                y: {
+                    ticks: { color: '#6B7280', font: { size: 11 } },
+                    grid: { display: false }
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    titleColor: P,
+                    bodyColor: '#333',
+                    borderColor: 'rgba(123, 45, 38, 0.12)',
+                    borderWidth: 1,
+                    padding: 10,
+                    cornerRadius: 6
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "admin_panel/base.html" %}
+{% load static %}
+
+{% block title %}Handora Admin - Delete User{% endblock %}
+
+{% block page_title %}Delete User{% endblock %}
+
+{% block content %}
+<div class="handora-content-wrapper">
+    <a href="{% url 'admin_users' %}" class="handora-back-link">← BACK</a>
+
+    <div class="handora-card">
+        <p>Are you sure you want to delete the user "<strong>{{ user_obj.username }}</strong>"?</p>
+        <p class="handora-warning-text">This action cannot be undone.</p>
+
+        <form method="post" class="handora-form-actions">
+            {% csrf_token %}
+            <button type="submit" class="handora-btn handora-btn-danger">Yes, Delete</button>
+            <a href="{% url 'admin_users' %}" class="handora-btn handora-btn-outline">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Search Results - Handora{% endblock %}
+
+{% block extra_css %}
+<style>
+    .search-product-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+        .search-product-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .search-product-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Fix spacing between Rating badge and View/Wishlist buttons on search results */
+    .search-product-grid .product-rating-badge {
+        margin-bottom: 12px;
+    }
+
+    .search-product-grid .product-actions {
+        margin-top: 8px;
+        gap: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="category-page">
+    <div class="handora-container">
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Home</a>
+            <span>/</span>
+            <span>Search Results</span>
+        </div>
+
+        <!-- Page Header -->
+        <div class="category-header">
+            <h1 class="category-title">Search Results for "{{ query }}"</h1>
+            <p class="category-count">{{ products | length }} items</p>
+        </div>
+
+        <!-- Sort Bar -->
+        <div class="sort-bar">
+            <span class="result-text">Showing {{ products | length }} products</span>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="search-product-grid">
+            {% for product in products %}
+            <div class="product-card">
+
+                <div class="product-image">
+                    <a href="{% url 'product_detail' product.slug %}" class="product-image-link">
+                        {% if product.rating and product.rating > 0 %}
+                            <div class="product-rating-badge">
+                                <span class="rating-number">{{ product.rating|floatformat:1 }}</span>
+                                <span class="rating-star">★</span>
+                            </div>
+                        {% endif %}
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                            <div class="placeholder-image">
+                                <span>{{ product.name|first }}</span>
+                            </div>
+                        {% endif %}
+                    </a>
+
+                    {% if product.is_bestseller %}
+                    <span class="product-badge badge-best">Best Seller</span>
+                    {% endif %}
+
+                    {% if product.is_featured %}
+                    <span class="product-badge badge-featured">Featured</span>
+                    {% endif %}
+
+                    <div class="product-actions">
+                        <a href="{% url 'product_detail' product.slug %}" class="action-btn" title="Quick View">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </a>
+                        {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'add_to_wishlist' product.id %}" class="wishlist-form-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="action-btn wishlist-heart {% if product.in_wishlist %}filled{% endif %}" title="Add to Wishlist">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="{% if product.in_wishlist %}currentColor{% else %}none{% endif %}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 0 5.5 5.5 0 0 0 0 7.78l.14.14L12 21.35l7.71-7.71.14-.14a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            </button>
+                        </form>
+                        {% else %}
+                        <a href="{% url 'login' %}?next={% url 'category' product.category.slug %}" class="action-btn" title="Login to Wishlist">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 0 5.5 5.5 0 0 0 0 7.78l.14.14L12 21.35l7.71-7.71.14-.14a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <a href="{% url 'product_detail' product.slug %}" class="product-name">
+                        {{ product.name|truncatechars:30 }}
+                    </a>
+                    <div class="product-price">₹{{ product.price }}</div>
+
+                    <form method="post" action="{% url 'add_to_cart' product.id %}" class="add-to-cart-form">
+                        {% csrf_token %}
+                        <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-products">
+                <p>No products found for "{{ query }}"</p>
+                <a href="{% url 'home' %}" class="btn-primary" style="display: inline-block; margin-top: 16px; padding: 10px 24px; background: #7B2D26; color: #fff; text-decoration: none; border-radius: 6px;">Continue Shopping</a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if products.paginator.num_pages > 1 %}
+        <div class="handora-pagination">
+            {% if products.has_previous %}
+            <a href="?q={{ query }}&page={{ products.previous_page_number }}" class="handora-page-btn">&laquo; Prev</a>
+            {% endif %}
+            {% for num in products.paginator.page_range %}
+                {% if products.number == num %}
+                <span class="handora-page-btn handora-page-active">{{ num }}</span>
+                {% else %}
+                <a href="?q={{ query }}&page={{ num }}" class="handora-page-btn">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+            {% if products.has_next %}
+            <a href="?q={{ query }}&page={{ products.next_page_number }}" class="handora-page-btn">Next &raquo;</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

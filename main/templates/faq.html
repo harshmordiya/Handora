@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Buyer FAQ - handora{% endblock %}
+
+{% block content %}
+<section class="page-section">
+    <h1>Buyer FAQ</h1>
+
+    <div class="faq-grid">
+        <div class="faq-item">
+            <h3 class="faq-question">How do I place an order?</h3>
+            <p class="faq-answer">Browse our collection, add items to your cart, and click "Proceed to Checkout". Fill in your shipping details, choose a payment method, and confirm your order. You will receive an order confirmation email immediately.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3 class="faq-question">What payment methods are accepted?</h3>
+            <p class="faq-answer">We accept UPI payments , Credit/Debit cards, Net Banking, and Cash on Delivery. All online payments are processed securely through our trusted payment gateway partners.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3 class="faq-question">How can I track my order?</h3>
+            <p class="faq-answer">Once your order ships, we will send you a tracking number via email and SMS. Use the tracking link to monitor your package in real time. You can also track orders from your Handora account dashboard.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3 class="faq-question">How long does delivery take?</h3>
+            <p class="faq-answer">Orders are processed within 1-2 business days. Standard delivery takes 3-7 business days depending on your location. Express shipping is available for select areas during checkout.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3 class="faq-question">Can I cancel my order?</h3>
+            <p class="faq-answer">You can cancel your order within 2 hours of placing it, as long as it has not yet been shipped. After shipping, cancellations are not accepted, but you can return the item upon delivery for a full refund.</p>
+        </div>
+
+
+        <div class="faq-item">
+            <h3 class="faq-question">Can I contact Handora for help?</h3>
+            <p class="faq-answer">Yes! Visit our <a href="{% url 'contact' %}">Contact Us</a> page, email us at support@handora.in. Our support team is available Monday to Saturday, 9 AM to 7 PM.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
