@@ -8,11 +8,12 @@
 1. [Project Description](#-project-description)
 2. [Technology Stack](#-technology-stack)
 3. [Working Demo Credentials](#-working-demo-credentials)
-4. [Screen Directory & Page Titles](#-screen-directory--page-titles)
-5. [Key Features & System Architecture](#-key-features--system-architecture)
-6. [Installation & Setup Guide](#-installation--setup-guide)
-7. [Environment Configuration](#-environment-configuration)
-8. [Project File Structure](#-project-file-structure)
+4. [Website Screenshots Gallery](#-website-screenshots-gallery)
+5. [Screen Directory & Page Titles](#-screen-directory--page-titles)
+6. [Key Features & System Architecture](#-key-features--system-architecture)
+7. [Installation & Setup Guide](#-installation--setup-guide)
+8. [Environment Configuration](#-environment-configuration)
+9. [Project File Structure](#-project-file-structure)
 
 ---
 
@@ -61,50 +62,135 @@ Pre-configured, verified demo credentials ready for immediate testing:
 
 ---
 
+## 📸 Website Screenshots Gallery
+
+### 1. Storefront & Catalog
+
+#### Home Page (`/`)
+![Home Page](screenshots/01_home.png)
+
+#### Category Catalog (`/category/wooden-craft/`)
+![Category Catalog](screenshots/02_category_catalog.png)
+
+#### Product Details (`/product/deer-shelf/`)
+![Product Details](screenshots/03_product_details.png)
+
+#### Smart Search Results (`/search/?q=wooden`)
+![Search Results](screenshots/04_search_results.png)
+
+---
+
+### 2. Cart, Checkout & Orders
+
+#### Shopping Cart (`/cart/`)
+![Shopping Cart](screenshots/05_shopping_cart.png)
+
+#### Checkout & Address Entry (`/checkout/`)
+![Checkout](screenshots/06_checkout.png)
+
+#### Payment Method Selection (`/payment/`)
+![Payment Method Selection](screenshots/07_payment_method.png)
+
+#### Order Confirmation & Instant Invoice (`/order_success/<id>/`)
+![Order Confirmation](screenshots/08_order_success.png)
+
+#### Customer Wishlist (`/wishlist/`)
+![Wishlist](screenshots/09_wishlist.png)
+
+---
+
+### 3. User Authentication & Password Recovery
+
+| Sign In (`/login/`) | User Registration (`/register/`) | Password Reset OTP (`/password-reset/`) |
+| :---: | :---: | :---: |
+| ![Sign In](screenshots/10_login.png) | ![Register](screenshots/11_register.png) | ![Password Reset](screenshots/12_password_reset.png) |
+
+---
+
+### 4. Brand & Informational Pages
+
+| About Us (`/about/`) | Our Story (`/our-story/`) | Our Commitment (`/our-commitment/`) |
+| :---: | :---: | :---: |
+| ![About Us](screenshots/13_about_us.png) | ![Our Story](screenshots/14_our_story.png) | ![Our Commitment](screenshots/15_our_commitment.png) |
+
+| Artisan Partners (`/artisan-partners/`) | Contact Us (`/contact/`) | FAQs (`/faq/`) |
+| :---: | :---: | :---: |
+| ![Artisan Partners](screenshots/16_artisan_partners.png) | ![Contact](screenshots/17_contact.png) | ![FAQs](screenshots/18_faq.png) |
+
+| Shipping Policy (`/shipping/`) | Privacy Policy (`/privacy-policy/`) | Terms & Conditions (`/terms/`) |
+| :---: | :---: | :---: |
+| ![Shipping](screenshots/19_shipping.png) | ![Privacy](screenshots/20_privacy_policy.png) | ![Terms](screenshots/21_terms.png) |
+
+---
+
+### 5. Staff Administration Portal (`/admin/`)
+
+#### Staff Login (`/admin/login/`)
+![Admin Login](screenshots/22_admin_login.png)
+
+#### Admin Analytics Dashboard (`/admin/dashboard/`)
+![Admin Dashboard](screenshots/23_admin_dashboard.png)
+
+#### Category Management (`/admin/categories/`)
+![Admin Categories](screenshots/24_admin_categories.png)
+
+#### Product Catalog Management (`/admin/products/`)
+![Admin Products](screenshots/25_admin_products.png)
+
+#### Order Management (`/admin/orders/`)
+![Admin Orders](screenshots/26_admin_orders.png)
+
+#### Order Details & Status Workflow (`/admin/orders/<id>/`)
+![Admin Order Details](screenshots/27_admin_order_detail.png)
+
+#### User Accounts & Roles (`/admin/users/`)
+![Admin Users](screenshots/28_admin_users.png)
+
+#### Customer Feedback & Email Desk (`/admin/feedback/`)
+![Admin Feedback](screenshots/29_admin_feedback.png)
+
+---
+
 ## 🖥️ Screen Directory & Page Titles
 
 The application includes the following customer storefront and staff portal screens:
 
-| # | Screen Title | Route URL | Template | Access | Key Features |
+| # | Screen Title | Route URL | Template | Access | Screenshot |
 | :- | :--- | :--- | :--- | :- | :--- |
-| 1 | **Home - Handora** | `/` | `home.html` | Public | Hero banner, categories grid, featured items, bestsellers, new arrivals |
-| 2 | **[Category Name] - Handora** | `/category/<slug>/` | `category.html` | Public | Product grid, price/discount sorting, pagination, wishlist toggles |
-| 3 | **[Product Name] - Handora** | `/product/<slug>/` | `product_detail.html` | Public | High-res imagery, rating stars, MRP/discount badges, quantity counter, add to cart |
-| 4 | **Search Results - Handora** | `/search/?q=...` | `search_results.html` | Public | Multi-keyword search parser with `featured` and `bestseller` filter tags |
-| 5 | **Your Cart - Handora** | `/cart/` | `cart.html` | Public | Line items, AJAX quantity updates, dynamic subtotal calculation, removal confirmation |
-| 6 | **Checkout - Handora** | `/checkout/` | `checkout.html` | Authenticated | Delivery address, contact info, order summary inspection |
-| 7 | **Choose Payment Method - Handora** | `/payment/` | `payment_method.html` | Authenticated | COD selection or Razorpay checkout modal (UPI, Cards, Net Banking) |
-| 8 | **COD Email Verification - Handora** | `/cod_email/` | `cod_email.html` | Authenticated | Email prompt for OTP dispatch before COD finalization |
-| 9 | **COD OTP Verification - Handora** | `/cod_otp/` | `cod_otp.html` | Authenticated | 6-digit OTP entry with 5-minute expiry countdown and resend option |
-| 10 | **Order Confirmation - Handora** | `/order_success/<id>/` | `order_success.html` | Authenticated | Order success message, payment reference, and instant invoice PDF download button |
-| 11 | **Handora Invoice / Bill (PDF)** | `/bill/<order_id>/` | Generated via ReportLab | Authenticated | Professional A4 PDF receipt with order summary, customer details, and tax totals |
-| 12 | **Secure Receipt (PDF Token)** | `/receipt/<token>/` | Generated via ReportLab | Token-signed | Cryptographically signed temporary link included in order confirmation emails |
-| 13 | **My Wishlist - Handora** | `/wishlist/` | `wishlist.html` | Authenticated | Saved favorite products with quick "Move to Cart" and "Remove" options |
-| 14 | **Sign In - Handora** | `/login/` | `login.html` | Public | Username & password authentication with eye-toggle password reveal |
-| 15 | **Register - Handora** | `/register/` | `register.html` | Public | Customer onboarding capturing Name, Email, 10-digit Phone, and Password validation |
-| 16 | **Password Reset - Handora** | `/password-reset/` | `password_reset.html` | Public | Email input to request a 6-digit password reset OTP |
-| 17 | **Verify Reset OTP - Handora** | `/verify-reset-otp/` | `verify_reset_otp.html` | Public | OTP verification with secure HMAC comparison and expiration handling |
-| 18 | **New Password - Handora** | `/reset-password/` | `password_reset_confirm.html`| Public | Set new password with confirmation and Django password validators |
-| 19 | **Password Reset Done - Handora**| `/password-reset/done/`| `password_reset_done.html` | Public | Success screen confirming updated credentials |
-| 20 | **About Us - Handora** | `/about/` | `about.html` | Public | Brand heritage and artisan craftsmanship story |
-| 21 | **Our Story - Handora** | `/our-story/` | `our_story.html` | Public | Detailed brand origin narrative |
-| 22 | **Our Commitment - Handora** | `/our-commitment/` | `our_commitment.html` | Public | Ethical sourcing, eco-friendly materials, and fair wages |
-| 23 | **Artisan Partners - Handora** | `/artisan-partners/` | `artisan_partners.html` | Public | Profiles and regional backgrounds of partner artisan communities |
-| 24 | **Contact Us - Handora** | `/contact/` | `contact.html` | Public | Contact form saving inquiries into `ContactMessage` model |
-| 25 | **FAQ - Handora** | `/faq/` | `faq.html` | Public | Common ordering, shipping, and return questions |
-| 26 | **Shipping Policy - Handora** | `/shipping/` | `shipping.html` | Public | Shipping timelines, packaging, and delivery terms |
-| 27 | **Privacy Policy - Handora** | `/privacy-policy/` | `privacy_policy.html` | Public | User data retention, security, and cookies policy |
-| 28 | **Terms & Conditions - Handora** | `/terms/` | `terms.html` | Public | Legal agreement for site usage and purchases |
-| 29 | **Admin Login - Handora** | `/admin/login/` | `admin_panel/login.html` | Public | Dedicated staff authentication screen |
-| 30 | **Admin Dashboard - Handora** | `/admin/dashboard/` | `admin_panel/dashboard.html`| Staff Only | Revenue cards, monthly revenue bar charts, order status donut charts |
-| 31 | **Admin Categories - Handora** | `/admin/categories/`| `admin_panel/categories.html`| Staff Only | Category table with product counts, edit links, and deletion workflows |
-| 32 | **Admin Products - Handora** | `/admin/products/` | `admin_panel/products.html` | Staff Only | Product catalog with inline AJAX switches for availability and discount |
-| 33 | **Admin Users - Handora** | `/admin/users/` | `admin_panel/users.html` | Staff Only | User administration list with staff badge indicators and phone numbers |
-| 34 | **Admin Orders - Handora** | `/admin/orders/` | `admin_panel/orders.html` | Staff Only | Order tracking list with filters by status (Pending, Confirmed, Shipped, Delivered) |
-| 35 | **Admin Order Detail - Handora** | `/admin/orders/<id>/`| `admin_panel/order_detail.html`| Staff Only | Full order invoice details, items table, and status transition selector |
-| 36 | **Admin Feedback - Handora** | `/admin/feedback/` | `admin_panel/feedback.html` | Staff Only | Customer contact messages, unread badge counter, and mark-read controls |
-| 37 | **Admin Feedback Reply - Handora**| `/admin/feedback/<id>/reply/`| `admin_panel/feedback_reply.html`| Staff Only | In-browser email drafting interface to reply directly to customer inquiries |
-| 38 | **Django Core Admin** | `/django-admin/` | Standard Django Admin | Superuser | Built-in fallback administration site |
+| 1 | **Home - Handora** | `/` | `home.html` | Public | [View](screenshots/01_home.png) |
+| 2 | **[Category Name] - Handora** | `/category/<slug>/` | `category.html` | Public | [View](screenshots/02_category_catalog.png) |
+| 3 | **[Product Name] - Handora** | `/product/<slug>/` | `product_detail.html` | Public | [View](screenshots/03_product_details.png) |
+| 4 | **Search Results - Handora** | `/search/?q=...` | `search_results.html` | Public | [View](screenshots/04_search_results.png) |
+| 5 | **Your Cart - Handora** | `/cart/` | `cart.html` | Public | [View](screenshots/05_shopping_cart.png) |
+| 6 | **Checkout - Handora** | `/checkout/` | `checkout.html` | Authenticated | [View](screenshots/06_checkout.png) |
+| 7 | **Choose Payment Method - Handora** | `/payment/` | `payment_method.html` | Authenticated | [View](screenshots/07_payment_method.png) |
+| 8 | **COD Email Verification - Handora** | `/cod_email/` | `cod_email.html` | Authenticated | [View](screenshots/07_payment_method.png) |
+| 9 | **COD OTP Verification - Handora** | `/cod_otp/` | `cod_otp.html` | Authenticated | [View](screenshots/12_password_reset.png) |
+| 10 | **Order Confirmation - Handora** | `/order_success/<id>/` | `order_success.html` | Authenticated | [View](screenshots/08_order_success.png) |
+| 11 | **Handora Invoice / Bill (PDF)** | `/bill/<order_id>/` | ReportLab PDF | Authenticated | [View](screenshots/08_order_success.png) |
+| 12 | **Secure Receipt (PDF Token)** | `/receipt/<token>/` | ReportLab PDF | Token-signed | [View](screenshots/08_order_success.png) |
+| 13 | **My Wishlist - Handora** | `/wishlist/` | `wishlist.html` | Authenticated | [View](screenshots/09_wishlist.png) |
+| 14 | **Sign In - Handora** | `/login/` | `login.html` | Public | [View](screenshots/10_login.png) |
+| 15 | **Register - Handora** | `/register/` | `register.html` | Public | [View](screenshots/11_register.png) |
+| 16 | **Password Reset - Handora** | `/password-reset/` | `password_reset.html` | Public | [View](screenshots/12_password_reset.png) |
+| 17 | **About Us - Handora** | `/about/` | `about.html` | Public | [View](screenshots/13_about_us.png) |
+| 18 | **Our Story - Handora** | `/our-story/` | `our_story.html` | Public | [View](screenshots/14_our_story.png) |
+| 19 | **Our Commitment - Handora** | `/our-commitment/` | `our_commitment.html` | Public | [View](screenshots/15_our_commitment.png) |
+| 20 | **Artisan Partners - Handora** | `/artisan-partners/` | `artisan_partners.html` | Public | [View](screenshots/16_artisan_partners.png) |
+| 21 | **Contact Us - Handora** | `/contact/` | `contact.html` | Public | [View](screenshots/17_contact.png) |
+| 22 | **FAQ - Handora** | `/faq/` | `faq.html` | Public | [View](screenshots/18_faq.png) |
+| 23 | **Shipping Policy - Handora** | `/shipping/` | `shipping.html` | Public | [View](screenshots/19_shipping.png) |
+| 24 | **Privacy Policy - Handora** | `/privacy-policy/` | `privacy_policy.html` | Public | [View](screenshots/20_privacy_policy.png) |
+| 25 | **Terms & Conditions - Handora** | `/terms/` | `terms.html` | Public | [View](screenshots/21_terms.png) |
+| 26 | **Admin Login - Handora** | `/admin/login/` | `admin_panel/login.html` | Public | [View](screenshots/22_admin_login.png) |
+| 27 | **Admin Dashboard - Handora** | `/admin/dashboard/` | `admin_panel/dashboard.html`| Staff Only | [View](screenshots/23_admin_dashboard.png) |
+| 28 | **Admin Categories - Handora** | `/admin/categories/`| `admin_panel/categories.html`| Staff Only | [View](screenshots/24_admin_categories.png) |
+| 29 | **Admin Products - Handora** | `/admin/products/` | `admin_panel/products.html` | Staff Only | [View](screenshots/25_admin_products.png) |
+| 30 | **Admin Orders - Handora** | `/admin/orders/` | `admin_panel/orders.html` | Staff Only | [View](screenshots/26_admin_orders.png) |
+| 31 | **Admin Order Detail - Handora** | `/admin/orders/<id>/`| `admin_panel/order_detail.html`| Staff Only | [View](screenshots/27_admin_order_detail.png) |
+| 32 | **Admin Users - Handora** | `/admin/users/` | `admin_panel/users.html` | Staff Only | [View](screenshots/28_admin_users.png) |
+| 33 | **Admin Feedback - Handora** | `/admin/feedback/` | `admin_panel/feedback.html` | Staff Only | [View](screenshots/29_admin_feedback.png) |
+| 34 | **Django Core Admin** | `/django-admin/` | Built-in Admin | Superuser | Default backend |
 
 ---
 
@@ -172,7 +258,7 @@ Open your browser at `http://127.0.0.1:8000/`.
 
 ## 🔒 Environment Configuration
 
-Configuration variables are stored in `.env` in the project root:
+Configuration variables are stored in `.env` in the project root (see `.env.example` for the template):
 
 ```env
 # Email Configuration (SMTP Gmail)
@@ -196,12 +282,25 @@ SITE_BASE_URL=http://127.0.0.1:8000
 
 ```
 desihands/
-├── .env                              # Environment configuration (secrets, SMTP, Razorpay)
-├── .gitignore                        # Git exclusion rules
-├── db.sqlite3                        # SQLite database
+├── .env.example                      # Environment variables skeleton
+├── .gitignore                        # Git exclusion rules (excludes .env, venv, db.sqlite3)
+├── db.sqlite3                        # SQLite database (local only, not in git)
 ├── manage.py                         # Django execution utility
 ├── requirements.txt                  # Python dependencies
-├── README.md                         # Project documentation and screen guide
+├── README.md                         # Project documentation and visual screenshots gallery
+├── screenshots/                      # High-resolution screenshots of all 29 website pages
+│   ├── 01_home.png
+│   ├── 02_category_catalog.png
+│   ├── 03_product_details.png
+│   ├── 04_search_results.png
+│   ├── 05_shopping_cart.png
+│   ├── 06_checkout.png
+│   ├── 07_payment_method.png
+│   ├── 08_order_success.png
+│   ├── 09_wishlist.png
+│   ├── 10_login.png
+│   ├── ...
+│   └── 29_admin_feedback.png
 ├── desihands/                        # Project configuration module
 │   ├── settings.py                   # Django settings, apps, templates, auth, payments
 │   ├── urls.py                       # Root URL routes (/admin/, /django-admin/, /)
