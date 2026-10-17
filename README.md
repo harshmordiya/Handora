@@ -101,25 +101,45 @@ Pre-configured, verified demo credentials ready for immediate testing:
 
 ### 3. User Authentication & Password Recovery
 
-| Sign In (`/login/`) | User Registration (`/register/`) | Password Reset OTP (`/password-reset/`) |
-| :---: | :---: | :---: |
-| ![Sign In](screenshots/10_login.png) | ![Register](screenshots/11_register.png) | ![Password Reset](screenshots/12_password_reset.png) |
+#### Sign In (`/login/`)
+![Sign In](screenshots/10_login.png)
+
+#### User Registration (`/register/`)
+![User Registration](screenshots/11_register.png)
+
+#### Password Reset OTP (`/password-reset/`)
+![Password Reset](screenshots/12_password_reset.png)
 
 ---
 
 ### 4. Brand & Informational Pages
 
-| About Us (`/about/`) | Our Story (`/our-story/`) | Our Commitment (`/our-commitment/`) |
-| :---: | :---: | :---: |
-| ![About Us](screenshots/13_about_us.png) | ![Our Story](screenshots/14_our_story.png) | ![Our Commitment](screenshots/15_our_commitment.png) |
+#### About Us (`/about/`)
+![About Us](screenshots/13_about_us.png)
 
-| Artisan Partners (`/artisan-partners/`) | Contact Us (`/contact/`) | FAQs (`/faq/`) |
-| :---: | :---: | :---: |
-| ![Artisan Partners](screenshots/16_artisan_partners.png) | ![Contact](screenshots/17_contact.png) | ![FAQs](screenshots/18_faq.png) |
+#### Our Story (`/our-story/`)
+![Our Story](screenshots/14_our_story.png)
 
-| Shipping Policy (`/shipping/`) | Privacy Policy (`/privacy-policy/`) | Terms & Conditions (`/terms/`) |
-| :---: | :---: | :---: |
-| ![Shipping](screenshots/19_shipping.png) | ![Privacy](screenshots/20_privacy_policy.png) | ![Terms](screenshots/21_terms.png) |
+#### Our Commitment (`/our-commitment/`)
+![Our Commitment](screenshots/15_our_commitment.png)
+
+#### Artisan Partners (`/artisan-partners/`)
+![Artisan Partners](screenshots/16_artisan_partners.png)
+
+#### Contact Us (`/contact/`)
+![Contact Us](screenshots/17_contact.png)
+
+#### Frequently Asked Questions (`/faq/`)
+![FAQs](screenshots/18_faq.png)
+
+#### Shipping Policy (`/shipping/`)
+![Shipping Policy](screenshots/19_shipping.png)
+
+#### Privacy Policy (`/privacy-policy/`)
+![Privacy Policy](screenshots/20_privacy_policy.png)
+
+#### Terms & Conditions (`/terms/`)
+![Terms & Conditions](screenshots/21_terms.png)
 
 ---
 
